@@ -1,7 +1,12 @@
 package com.fei.baselibrary.ioc;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -9,7 +14,7 @@ import java.lang.reflect.Method;
 
 /**
  * @ClassName: ViewUtils
- * @Description: 描述
+ * @Description: 注解+反射完成findViewById和setOnClickListener
  * @Author: Fei
  * @CreateDate: 2020/10/29 17:38
  * @UpdateUser: Fei
@@ -35,7 +40,7 @@ public class ViewUtils {
     }
 
     /**
-     * 注册方法
+     * 注册
      *
      * @param object 类，通过这个类找属性和方法
      * @param finder findViewById
@@ -45,7 +50,7 @@ public class ViewUtils {
         injectMethod(finder, object);
     }
 
-
+    //注册方法
     private static void injectMethod(ViewFinder finder, Object object) {
         ///1.获取所有属性
         Class<?> aClass = object.getClass();
@@ -53,6 +58,7 @@ public class ViewUtils {
         ///2.获取Annotation的值
         for (Method declaredMethod : declaredMethods) {
             OnClick onClick = declaredMethod.getAnnotation(OnClick.class);
+            CheckNet checkNet = declaredMethod.getAnnotation(CheckNet.class);
             if (onClick != null) {
                 int[] viewIds = onClick.value();
                 for (int viewId : viewIds) {
@@ -60,7 +66,7 @@ public class ViewUtils {
                     View view = finder.findViewById(viewId);
                     if (view != null) {
                         ///4.新增点击事件
-                        view.setOnClickListener(new DeclareClickListener(declaredMethod, object));
+                        view.setOnClickListener(new DeclareClickListener(declaredMethod, object, checkNet));
                     }
                 }
             }
@@ -70,14 +76,27 @@ public class ViewUtils {
     private static class DeclareClickListener implements View.OnClickListener {
         private final Method method;
         private final Object object;
+        private final CheckNet checkNet;
 
-        public DeclareClickListener(Method declaredMethod, Object object) {
+        public DeclareClickListener(Method declaredMethod, Object object, CheckNet checkNet) {
             this.method = declaredMethod;
             this.object = object;
+            this.checkNet = checkNet;
         }
 
         @Override
         public void onClick(View view) {
+            ///判断是否需要检测网络状态
+            if (checkNet != null) {
+                //需要
+                boolean isNet = checkConnectStateByNetworkInfo(view.getContext());
+                if (!isNet) {
+                    Toast.makeText(view.getContext(),
+                            TextUtils.isEmpty(checkNet.value()) ? "亲，你的网络不太给力！" :
+                                    checkNet.value(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
             ///5.反射方法
             try {
                 method.setAccessible(true);
@@ -113,5 +132,23 @@ public class ViewUtils {
                 }
             }
         }
+    }
+
+    /**
+     * 根据当前设备的活动网络信息判断网络状态
+     *
+     * @param mContext
+     * @return
+     */
+    private static boolean checkConnectStateByNetworkInfo(Context mContext) {
+
+        ConnectivityManager cm = (ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        return networkInfo != null &&
+                (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE
+                        || networkInfo.getType() == ConnectivityManager.TYPE_WIFI
+                        || networkInfo.getType() == ConnectivityManager.TYPE_ETHERNET);
     }
 }

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fei.baselibrary.ioc.CheckNet;
 import com.fei.baselibrary.ioc.OnClick;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.baselibrary.ioc.ViewUtils;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.iv_text,R.id.tv_text})
+    @CheckNet("")
     private void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_text:
