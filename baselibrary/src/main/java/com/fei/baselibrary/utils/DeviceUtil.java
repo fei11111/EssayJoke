@@ -22,29 +22,39 @@ public class DeviceUtil {
 
     /**
      * 获取手机信息，软件信息
-     * */
+     */
     public static HashMap<String, String> obtainSimpleInfo(Context context) {
         HashMap<String, String> map = new HashMap<>();
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+        PackageInfo packageInfo = getPackageInfo(context);
+        if (packageInfo != null) {
             map.put("VERSION_NAME", packageInfo.versionName);
             map.put("VERSION_CODE", packageInfo.versionCode + "");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
         }
         map.put("MODEL", Build.MODEL);
         map.put("SDK_INT", Build.VERSION.SDK_INT + "");
-        map.put("PRODUCT",Build.PRODUCT);
-        map.put("MOBILE_INFO",getMobileInfo());
+        map.put("PRODUCT", Build.PRODUCT);
+        map.put("MOBILE_INFO", getMobileInfo());
         return map;
     }
 
     /**
+     * 获取软件信息
+     */
+    public static PackageInfo getPackageInfo(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return packageInfo;
+    }
+
+    /**
      * 获取手机信息
-     * */
-    private static String getMobileInfo(){
+     */
+    private static String getMobileInfo() {
         StringBuffer sb = new StringBuffer();
         Field[] declaredFields = Build.class.getDeclaredFields();
         for (Field declaredField : declaredFields) {
@@ -52,7 +62,7 @@ public class DeviceUtil {
             try {
                 String name = declaredField.getName();
                 String value = declaredField.get(null).toString();
-                sb.append(name+" = "+ value);
+                sb.append(name + " = " + value);
                 sb.append("\n");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
