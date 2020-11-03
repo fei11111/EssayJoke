@@ -2,10 +2,17 @@ package com.fei.essayjoke;
 
 import android.app.Application;
 import android.content.pm.PackageInfo;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.fei.baselibrary.ExceptionCrashHandler;
 import com.fei.baselibrary.utils.DeviceUtil;
+import com.fei.baselibrary.utils.LogUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @ClassName: BaseApplication
@@ -39,9 +46,23 @@ public class BaseApplication extends Application {
         patchManager = new PatchManager(this);
         PackageInfo packageInfo = DeviceUtil.getPackageInfo(this);
         if (packageInfo != null) {
+            LogUtils.i("tag",packageInfo.versionName);
             patchManager.init(packageInfo.versionName);//current version
         }
         patchManager.loadPatch();;
+
+        File dir = Environment.getExternalStorageDirectory();
+        File file = new File(dir, "out.apatch");
+        Log.i("tag",file.getAbsolutePath());
+        if(file.exists()) {
+            try {
+                BaseApplication.patchManager.addPatch(file.getAbsolutePath());
+                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //初始化全局异常

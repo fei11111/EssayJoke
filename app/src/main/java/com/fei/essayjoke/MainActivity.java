@@ -1,19 +1,13 @@
 package com.fei.essayjoke;
 
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
-import com.fei.baselibrary.ioc.CheckNet;
-import com.fei.baselibrary.ioc.OnClick;
 import com.fei.baselibrary.ioc.ViewById;
-import com.fei.baselibrary.utils.LogUtils;
 import com.fei.framelibrary.BaseSkinActivity;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -45,24 +39,10 @@ public class MainActivity extends BaseSkinActivity {
 //            }
 //        }
 
-        File dir = getExternalCacheDir();
-        LogUtils.i(TAG, dir.getAbsolutePath());
-        File file = new File(dir, "fix.apatch");
-        if(file.exists()) {
-            try {
-                BaseApplication.patchManager.addPatch(file.getAbsolutePath());
-                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
-            }
-        }
-
     }
 
     @Override
     protected void initView() {
-
     }
 
     @Override
@@ -75,9 +55,5 @@ public class MainActivity extends BaseSkinActivity {
         return R.layout.activity_main;
     }
 
-    @OnClick(R.id.iv_text)
-    @CheckNet("网络不好")
-    private void onClick(View v) {
 
-    }
 }

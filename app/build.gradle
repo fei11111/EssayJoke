@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+
+//获取签名配置信息
+def keystorePropertiesFile = rootProject.file("app/jks/keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     compileSdkVersion 29
     buildToolsVersion '28.0.2'
@@ -13,12 +18,44 @@ android {
 
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    signingConfigs {
+        config {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
+
+    buildTypes {
+        debug {
+            // 不混淆
+            minifyEnabled true
+            // 不压缩优化_animationController
+            zipAlignEnabled true
+            // 不进行资源优化（删除无用资源等）
+            shrinkResources true
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+
+            signingConfig signingConfigs.config
+        }
+
+        release {
+            // 混淆
+            minifyEnabled true
+            // 压缩优化
+            zipAlignEnabled true
+            // 进行资源优化（删除无用资源等）
+            shrinkResources true
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+
+            signingConfig signingConfigs.config
+        }
+    }
+
+
 }
 
 dependencies {
