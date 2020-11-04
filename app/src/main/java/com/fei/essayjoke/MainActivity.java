@@ -53,7 +53,7 @@ public class MainActivity extends BaseSkinActivity {
         Log.i("tag", file.getAbsolutePath());
         if (file.exists()&&file.isFile()) {
             try {
-                fixManager.addPatch(file);
+                fixManager.addPatch(file);///需要放到线程操作
                 Toast.makeText(MainActivity.this, "修复成功", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
