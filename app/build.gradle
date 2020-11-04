@@ -30,15 +30,15 @@ android {
     buildTypes {
         debug {
             // 不混淆
-            minifyEnabled true
-            // 不压缩优化_animationController
-            zipAlignEnabled true
-            // 不进行资源优化（删除无用资源等）
-            shrinkResources true
+//            minifyEnabled true
+//            // 不压缩优化_animationController
+//            zipAlignEnabled true
+//            // 不进行资源优化（删除无用资源等）
+//            shrinkResources true
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
 
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
 
         release {

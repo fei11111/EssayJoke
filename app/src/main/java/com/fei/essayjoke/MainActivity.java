@@ -1,13 +1,19 @@
 package com.fei.essayjoke;
 
+import android.os.Environment;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
+import com.fei.baselibrary.fix.FixManager;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.framelibrary.BaseSkinActivity;
 
 import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -38,6 +44,36 @@ public class MainActivity extends BaseSkinActivity {
 //                e.printStackTrace();
 //            }
 //        }
+
+        FixManager fixManager = new FixManager(MainActivity.this);
+        fixManager.init();
+        fixManager.loadPatch();
+        File dir = Environment.getExternalStorageDirectory();
+        File file = new File(dir, "3.dex");
+        Log.i("tag", file.getAbsolutePath());
+        if (file.exists()&&file.isFile()) {
+            try {
+                fixManager.addPatch(file);
+                Toast.makeText(MainActivity.this, "修复成功", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
+            } catch (IllegalAccessException e) {
+                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        ivText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              startActivity(TestActivity.class);
+            }
+        });
 
     }
 
