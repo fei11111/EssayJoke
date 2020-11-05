@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
+import com.fei.baselibrary.dialog.CustomDialog;
 import com.fei.baselibrary.fix.FixManager;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.framelibrary.BaseSkinActivity;
@@ -26,7 +27,7 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initData() {
-        //获取异常文件
+        //异常处理
         File crashFile = ExceptionCrashHandler.getInstance().getCrashFile();
 //        if (crashFile.exists()) {
 //            //上传到服务器
@@ -45,33 +46,42 @@ public class MainActivity extends BaseSkinActivity {
 //            }
 //        }
 
-        FixManager fixManager = new FixManager(MainActivity.this);
-        fixManager.init();
-        fixManager.loadPatch();
-        File dir = Environment.getExternalStorageDirectory();
-        File file = new File(dir, "3.dex");
-        Log.i("tag", file.getAbsolutePath());
-        if (file.exists()&&file.isFile()) {
-            try {
-                fixManager.addPatch(file);///需要放到线程操作
-                Toast.makeText(MainActivity.this, "修复成功", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
-            } catch (IllegalAccessException e) {
-                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+            ///热修复
+//        FixManager fixManager = new FixManager(MainActivity.this);
+//        fixManager.init();
+//        fixManager.loadPatch();
+//        File dir = Environment.getExternalStorageDirectory();
+//        File file = new File(dir, "3.dex");
+//        Log.i("tag", file.getAbsolutePath());
+//        if (file.exists()&&file.isFile()) {
+//            try {
+//                fixManager.addPatch(file);///需要放到线程操作
+//                Toast.makeText(MainActivity.this, "修复成功", Toast.LENGTH_SHORT).show();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
+//            } catch (IllegalAccessException e) {
+//                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
+//                e.printStackTrace();
+//            } catch (NoSuchFieldException e) {
+//                Toast.makeText(MainActivity.this, "修复失败", Toast.LENGTH_SHORT).show();
+//                e.printStackTrace();
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
         ivText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              startActivity(TestActivity.class);
+                CustomDialog dialog = new CustomDialog.Builder(MainActivity.this)
+                        .setContentView(R.layout.dialog_comment_detail).setText(R.id.submit_btn,"接收").show();
+
+                dialog.setOnClickListener(R.id.submit_btn,new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
         });
 
