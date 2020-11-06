@@ -1,4 +1,4 @@
-package com.fei.baselibrary.dialog;
+package com.fei.baselibrary.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
 
+import com.fei.baselibrary.view.ViewHelper;
+
 /**
  * @ClassName: dialog控制器，主要进行操作
  * @Description: 描述
@@ -23,28 +25,28 @@ import androidx.annotation.StyleRes;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-class CustomController {
+public class CustomController {
 
     private final Dialog dialog;
 
     private final Window window;
 
-    private final DialogViewHelper viewHelper;
+    private final ViewHelper viewHelper;
 
     CustomController(@NonNull Dialog dialog, @NonNull Window window) {
         this.dialog = dialog;
         this.window = window;
-        viewHelper = new DialogViewHelper();
+        viewHelper = new ViewHelper();
     }
 
-    public DialogViewHelper getViewHelper() {
+    public ViewHelper getViewHelper() {
         return viewHelper;
     }
 
     /**
      * 获取所有参数，apply进行组装
      */
-    static class CustomParam {
+   public static class CustomParam {
 
         public int mThemeResId;
         public Context mContext;

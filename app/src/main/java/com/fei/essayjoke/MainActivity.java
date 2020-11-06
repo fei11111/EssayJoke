@@ -5,11 +5,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.fei.baselibrary.view.dialog.*;
 import com.fei.baselibrary.ExceptionCrashHandler;
-import com.fei.baselibrary.dialog.CustomDialog;
 import com.fei.baselibrary.ioc.ViewById;
-import com.fei.framelibrary.BaseSkinActivity;
+import com.fei.framelibrary.base.BaseSkinActivity;
 
 import java.io.File;
 

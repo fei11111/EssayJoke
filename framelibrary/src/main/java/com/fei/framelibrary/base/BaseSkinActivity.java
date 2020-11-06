@@ -1,4 +1,4 @@
-package com.fei.framelibrary;
+package com.fei.framelibrary.base;
 
 import com.fei.baselibrary.base.BaseActivity;
 

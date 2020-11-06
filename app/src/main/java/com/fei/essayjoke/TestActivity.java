@@ -6,7 +6,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fei.baselibrary.ioc.ViewById;
-import com.fei.framelibrary.BaseSkinActivity;
+import com.fei.framelibrary.base.BaseSkinActivity;
 
 /**
  * @ClassName: TestActivity

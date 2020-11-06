@@ -1,4 +1,4 @@
-package com.fei.baselibrary.dialog;
+package com.fei.baselibrary.view;
 
 import android.content.Context;
 import android.util.SparseArray;
@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import java.lang.ref.WeakReference;
 
 /**
- * @ClassName: dialog辅助类
+ * @ClassName: 辅助类，初始化布局控件和点击事件
  * @Description: 描述
  * @Author: Fei
  * @CreateDate: 2020/11/5 18:33
@@ -22,7 +22,7 @@ import java.lang.ref.WeakReference;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class DialogViewHelper {
+public class ViewHelper {
 
     private View contentView;
     private SparseArray<WeakReference<View>> views;

@@ -1,4 +1,4 @@
-package com.fei.baselibrary.dialog;
+package com.fei.baselibrary.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

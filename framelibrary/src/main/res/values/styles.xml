@@ -1,0 +1,53 @@
+<resources>
+
+
+    <style name="Font6Style">
+        <item name="android:textSize">?attr/tx_6</item>
+    </style>
+
+    <style name="Font8Style">
+        <item name="android:textSize">?attr/tx_8</item>
+    </style>
+
+    <style name="Font10Style">
+        <item name="android:textSize">?attr/tx_10</item>
+    </style>
+
+    <style name="Font12Style">
+        <item name="android:textSize">?attr/tx_12</item>
+    </style>
+
+    <style name="Font13Style">
+        <item name="android:textSize">?attr/tx_13</item>
+    </style>
+
+    <style name="Font14Style">
+        <item name="android:textSize">?attr/tx_14</item>
+    </style>
+
+    <style name="Font15Style">
+        <item name="android:textSize">?attr/tx_15</item>
+    </style>
+
+    <style name="Font16Style">
+        <item name="android:textSize">?attr/tx_16</item>
+    </style>
+
+    <style name="Font18Style">
+        <item name="android:textSize">?attr/tx_18</item>
+    </style>
+
+    <style name="Font20Style">
+        <item name="android:textSize">?attr/tx_20</item>
+    </style>
+
+    <style name="Font22Style">
+        <item name="android:textSize">?attr/tx_22</item>
+    </style>
+
+    <style name="Font25Style">
+        <item name="android:textSize">?attr/tx_25</item>
+    </style>
+
+
+</resources>

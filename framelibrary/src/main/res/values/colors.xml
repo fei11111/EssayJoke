@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="title_bar_bg_day">#ffdcd9cf</color>
+    <color name="color_white">#ffffff</color>
+    <color name="colorText">#5f5f5f</color>
+    <color name="colorTextSub">#a6aab0</color>
+</resources>
