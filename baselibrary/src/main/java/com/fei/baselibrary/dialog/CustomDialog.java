@@ -213,6 +213,7 @@ public class CustomDialog extends Dialog {
 
         /**
          * 从底部弹出
+         *
          * @param isAnimation 是否设置动画
          */
         public CustomDialog.Builder fromBottom(boolean isAnimation) {
@@ -225,16 +226,16 @@ public class CustomDialog extends Dialog {
 
         /**
          * 设置默认动画
-         * */
-        public CustomDialog.Builder addDefaultAnimation(){
+         */
+        public CustomDialog.Builder addDefaultAnimation() {
             P.mAnimation = R.style.dialog_anim_scale;
             return this;
         }
 
         /**
          * 自定义动画
-         * */
-        public CustomDialog.Builder setAnimation(@StyleRes int animation){
+         */
+        public CustomDialog.Builder setAnimation(@StyleRes int animation) {
             P.mAnimation = animation;
             return this;
         }
@@ -247,10 +248,10 @@ public class CustomDialog extends Dialog {
          * If you are interested in listening for all cases where the dialog is dismissed
          * and not just when it is canceled, see
          * {@link #setOnDismissListener(android.content.DialogInterface.OnDismissListener) setOnDismissListener}.</p>
-         * @see #setCancelable(boolean)
-         * @see #setOnDismissListener(android.content.DialogInterface.OnDismissListener)
          *
          * @return This Builder object to allow for chaining of calls to set methods
+         * @see #setCancelable(boolean)
+         * @see #setOnDismissListener(android.content.DialogInterface.OnDismissListener)
          */
         public CustomDialog.Builder setOnCancelListener(OnCancelListener onCancelListener) {
             P.mOnCancelListener = onCancelListener;
