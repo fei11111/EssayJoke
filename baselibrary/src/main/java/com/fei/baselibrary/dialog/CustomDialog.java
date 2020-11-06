@@ -35,7 +35,17 @@ public class CustomDialog extends Dialog {
         controller = new CustomController(this, getWindow());
     }
 
-    public View getView(@IdRes int viewId) {
+    /**
+     * 设置文本
+     */
+    public void setText(@IdRes int viewId, CharSequence text) {
+        controller.getViewHelper().setText(viewId, text);
+    }
+
+    /**
+     * 通过viewId获取布局中View
+     */
+    public <T extends View> T getView(@IdRes int viewId) {
         return controller.getViewHelper().getView(viewId);
     }
 
@@ -203,12 +213,70 @@ public class CustomDialog extends Dialog {
 
         /**
          * 从底部弹出
+         * @param isAnimation 是否设置动画
          */
-        public CustomDialog.Builder fromBottom() {
-            P.mAnimation = R.style.dialog_anim_from_bottom;
+        public CustomDialog.Builder fromBottom(boolean isAnimation) {
+            if (isAnimation) {
+                P.mAnimation = R.style.dialog_anim_from_bottom;
+            }
             P.mGravity = Gravity.BOTTOM;
             return this;
         }
+
+        /**
+         * 设置默认动画
+         * */
+        public CustomDialog.Builder addDefaultAnimation(){
+            P.mAnimation = R.style.dialog_anim_scale;
+            return this;
+        }
+
+        /**
+         * 自定义动画
+         * */
+        public CustomDialog.Builder setAnimation(@StyleRes int animation){
+            P.mAnimation = animation;
+            return this;
+        }
+
+        /**
+         * Sets the callback that will be called if the dialog is canceled.
+         *
+         * <p>Even in a cancelable dialog, the dialog may be dismissed for reasons other than
+         * being canceled or one of the supplied choices being selected.
+         * If you are interested in listening for all cases where the dialog is dismissed
+         * and not just when it is canceled, see
+         * {@link #setOnDismissListener(android.content.DialogInterface.OnDismissListener) setOnDismissListener}.</p>
+         * @see #setCancelable(boolean)
+         * @see #setOnDismissListener(android.content.DialogInterface.OnDismissListener)
+         *
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public CustomDialog.Builder setOnCancelListener(OnCancelListener onCancelListener) {
+            P.mOnCancelListener = onCancelListener;
+            return this;
+        }
+
+        /**
+         * Sets the callback that will be called when the dialog is dismissed for any reason.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public CustomDialog.Builder setOnDismissListener(OnDismissListener onDismissListener) {
+            P.mOnDismissListener = onDismissListener;
+            return this;
+        }
+
+        /**
+         * Sets the callback that will be called if a key is dispatched to the dialog.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods
+         */
+        public CustomDialog.Builder setOnKeyListener(OnKeyListener onKeyListener) {
+            P.mOnKeyListener = onKeyListener;
+            return this;
+        }
+
 
         /**
          * Creates an {@link CustomDialog} with the arguments supplied to this
@@ -223,6 +291,11 @@ public class CustomDialog extends Dialog {
             final CustomDialog dialog = new CustomDialog(P.mContext, P.mThemeResId);
             //将所有参数进行组装
             P.apply(dialog.controller);
+            dialog.setOnCancelListener(P.mOnCancelListener);
+            dialog.setOnDismissListener(P.mOnDismissListener);
+            if (P.mOnKeyListener != null) {
+                dialog.setOnKeyListener(P.mOnKeyListener);
+            }
             return dialog;
         }
 

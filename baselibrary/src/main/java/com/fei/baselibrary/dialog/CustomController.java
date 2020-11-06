@@ -50,7 +50,7 @@ class CustomController {
 
         public int mThemeResId;
         public Context mContext;
-        public boolean mCancelable;
+        public boolean mCancelable = true;
         public View mContentView;
         public int mContentViewId;
         public SparseArray<CharSequence> mTextArray = new SparseArray<>();
@@ -61,7 +61,7 @@ class CustomController {
         public int mWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
         public int mHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
         public int mGravity = Gravity.CENTER;
-        public int mAnimation = R.style.dialog_anim_scale;
+        public int mAnimation = 0;
 
         public CustomParam(@NonNull Context context, @StyleRes int themeResId) {
             this.mContext = context;

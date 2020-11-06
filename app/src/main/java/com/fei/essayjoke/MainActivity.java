@@ -1,20 +1,17 @@
 package com.fei.essayjoke;
 
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
 import com.fei.baselibrary.dialog.CustomDialog;
-import com.fei.baselibrary.fix.FixManager;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.framelibrary.BaseSkinActivity;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -46,7 +43,7 @@ public class MainActivity extends BaseSkinActivity {
 //            }
 //        }
 
-            ///热修复
+        ///热修复
 //        FixManager fixManager = new FixManager(MainActivity.this);
 //        fixManager.init();
 //        fixManager.loadPatch();
@@ -74,12 +71,12 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 CustomDialog dialog = new CustomDialog.Builder(MainActivity.this)
-                        .setContentView(R.layout.dialog_comment_detail).setText(R.id.submit_btn,"接收").show();
-
-                dialog.setOnClickListener(R.id.submit_btn,new View.OnClickListener() {
+                        .setContentView(R.layout.dialog_comment_detail).setText(R.id.submit_btn, "接收").show();
+                final EditText editText = dialog.getView(R.id.comment_editor);
+                dialog.setOnClickListener(R.id.submit_btn, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Toast.makeText(MainActivity.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
