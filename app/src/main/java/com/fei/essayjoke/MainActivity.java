@@ -5,10 +5,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.fei.baselibrary.view.dialog.*;
+
 import com.fei.baselibrary.ExceptionCrashHandler;
 import com.fei.baselibrary.ioc.ViewById;
+import com.fei.baselibrary.view.dialog.CustomDialog;
 import com.fei.framelibrary.base.BaseSkinActivity;
+import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 
 import java.io.File;
 
@@ -89,7 +91,13 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initTile() {
-
+        DefaultNavigatorBar defaultNavigatorBar = new DefaultNavigatorBar.Builder(this)
+                .setTitle("标题").setRightText("发布").setOnRightTextListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "发布", Toast.LENGTH_SHORT).show();
+                    }
+                }).build();
     }
 
     @Override
