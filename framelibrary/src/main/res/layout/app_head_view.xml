@@ -16,14 +16,13 @@
             android:layout_height="@dimen/size_35"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/size_5"
-            android:paddingRight="@dimen/size_5">
+            android:minWidth="@dimen/size_35">
 
             <ImageView
                 android:id="@+id/iv_head_left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:src="@drawable/selector_head_left_arrow"/>
 
             <TextView
                 android:id="@+id/tv_head_left"
@@ -39,7 +38,7 @@
         <FrameLayout
             android:id="@+id/fl_head_right"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/size_35"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:minWidth="@dimen/size_35"
@@ -58,7 +57,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/size_10"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                  android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/iv_head_right_one"
@@ -77,6 +76,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:paddingLeft="@dimen/size_5"
+                android:paddingRight="@dimen/size_5"
                 android:textColor="@color/selector_color_white_to_gray"
                 android:visibility="gone" />
 

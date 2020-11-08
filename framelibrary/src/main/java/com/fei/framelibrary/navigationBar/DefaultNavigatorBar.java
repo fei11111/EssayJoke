@@ -48,7 +48,7 @@ public class DefaultNavigatorBar extends AbsNavigationBar {
     /**
      * 设置搜索框
      */
-    public void setSearchVisiable() {
+    public void setSearchVisible() {
         setVisibility(R.id.tv_title, GONE);
         setVisibility(R.id.rl_search, VISIBLE);
     }
