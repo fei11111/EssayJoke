@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
 import com.fei.baselibrary.fix.FixManager;
+import com.fei.framelibrary.base.BaseSkinApplication;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,29 +22,8 @@ import java.io.IOException;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class BaseApplication extends Application {
+public class EssayApplication extends BaseSkinApplication {
 
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        init();
-    }
 
-    private void init() {
-        //初始化全局异常
-        initCrash();
-        //初始化热修复
-        initHotFix();
-    }
-
-    //初始化热修复
-    private void initHotFix() {
-
-    }
-
-    //初始化全局异常
-    private void initCrash() {
-        ExceptionCrashHandler.getInstance().init(this);
-    }
 }

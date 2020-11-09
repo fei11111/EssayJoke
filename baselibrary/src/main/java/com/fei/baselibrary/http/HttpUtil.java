@@ -1,9 +1,10 @@
 package com.fei.baselibrary.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @ClassName: HttpUtil
@@ -36,26 +37,105 @@ public class HttpUtil {
     //网络请求
     private static IHttpEngine httpEngine;
 
+    private static HttpUtil instance;
+
     private HttpUtil(Context context) {
         mContext = context;
-        mParams = new HashMap();
-    }
-
-    public static HttpUtil with(Context context) {
-        return new HttpUtil(context);
+        mParams = new ConcurrentHashMap();
     }
 
     /**
-     *
+     * 创建httpUtil
+     */
+    public static HttpUtil with(Context context) {
+        if (instance == null) {
+            synchronized (HttpUtil.class) {
+                if (instance == null) {
+                    instance = new HttpUtil(context);
+                }
+            }
+        }
+        return instance;
+    }
+
+
+    /**
+     * 在Application初始化
      */
     public static void init(IHttpEngine mHttpEngine) {
         httpEngine = mHttpEngine;
     }
 
-    public HttpUtil post() {
+    /**
+     * 改变网络请求框架
+     */
+    public static void exchange(IHttpEngine mHttpEngine) {
+        httpEngine = mHttpEngine;
+    }
+
+    /**
+     * get请求方式
+     */
+    public HttpUtil get(String url) {
+        this.mUrl = url;
+        requestType = GET;
+        return this;
+    }
+
+    /**
+     * post请求方式
+     */
+    public HttpUtil post(String url) {
+        this.mUrl = url;
         requestType = POST;
         return this;
     }
 
+    /**
+     * 添加参数
+     */
+    public HttpUtil addParam(String key, Object value) {
+        mParams.put(key, value);
+        return this;
+    }
+
+    /**
+     * 添加所有参数
+     */
+    public HttpUtil addParams(Map<String, Object> params) {
+        mParams.putAll(params);
+        return this;
+    }
+
+    /**
+     * 执行
+     */
+    public void execute() {
+        execute(EngineCallBack.DEFAULT_CALLBACK);
+    }
+
+
+    /**
+     * 执行
+     */
+    public void execute(EngineCallBack callBack) {
+        if (httpEngine == null) {
+            throw new IllegalArgumentException("未调用init方法，初始化");
+        }
+
+        if (mContext == null) {
+            throw new IllegalArgumentException("未调用init方法，初始化");
+        }
+
+        if (TextUtils.isEmpty(mUrl)) {
+            throw new IllegalArgumentException("未初始化url");
+        }
+
+        if (requestType == GET) {
+            httpEngine.get(mContext, mUrl, mParams, callBack);
+        } else if (requestType == POST) {
+            httpEngine.post(mContext, mUrl, mParams, callBack);
+        }
+    }
 
 }
