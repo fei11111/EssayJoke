@@ -26,7 +26,8 @@ public class BaseSkinApplication extends BaseApplication {
     /**
      * 初始化请求
      */
-    private void initHttp() {
+    @Override
+    public void initHttp() {
         HttpUtil.init(new OkHttpEngine());
     }
 }

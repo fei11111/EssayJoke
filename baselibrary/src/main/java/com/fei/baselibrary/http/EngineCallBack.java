@@ -1,5 +1,9 @@
 package com.fei.baselibrary.http;
 
+import android.content.Context;
+
+import java.util.Map;
+
 /**
  * @ClassName: EngineCallBack
  * @Description: 网络请求返回
@@ -12,8 +16,8 @@ package com.fei.baselibrary.http;
  */
 public interface EngineCallBack {
 
-    //请求之前，可以显示loading
-    void onPreExecute();
+    //请求之前，可以添加业务参数
+    void onPreExecute(Context context, Map<String,Object> params);
 
     //失败
     void onError(Exception e);
@@ -23,8 +27,10 @@ public interface EngineCallBack {
 
     //默认请求返回
     public static final EngineCallBack DEFAULT_CALLBACK = new EngineCallBack() {
+
+
         @Override
-        public void onPreExecute() {
+        public void onPreExecute(Context context, Map<String, Object> params) {
 
         }
 

@@ -3,6 +3,8 @@ package com.fei.baselibrary.http;
 import android.content.Context;
 import android.text.TextUtils;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -131,11 +133,24 @@ public class HttpUtil {
             throw new IllegalArgumentException("未初始化url");
         }
 
+        //可以添加业务逻辑代码
+        callBack.onPreExecute(mContext, mParams);
+
         if (requestType == GET) {
             httpEngine.get(mContext, mUrl, mParams, callBack);
         } else if (requestType == POST) {
             httpEngine.post(mContext, mUrl, mParams, callBack);
         }
+    }
+
+
+    /**
+     * 解析一个类上面的class信息
+     */
+    public static Class<?> analysisClazzInfo(Object object) {
+        Type genType = object.getClass().getGenericSuperclass();
+        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+        return (Class<?>) params[0];
     }
 
 }
