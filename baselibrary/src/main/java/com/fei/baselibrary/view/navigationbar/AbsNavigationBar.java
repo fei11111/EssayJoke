@@ -15,7 +15,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 
 /**
- * @ClassName: AbsNavigationBar 抽象类
+ * @ClassName: AbsNavigationBar 抽象类 链式+builder
  * @Description: 自定义toolBar都集成这个类，实现自己的头部
  * @Author: Fei
  * @CreateDate: 2020/11/6 15:59

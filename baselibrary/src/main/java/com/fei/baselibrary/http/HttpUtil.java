@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @ClassName: HttpUtil
+ * @ClassName: HttpUtil 链式
  * @Description: 网络请求工具类
  * @Author: Fei
  * @CreateDate: 2020-11-08 15:09
@@ -42,6 +42,8 @@ public class HttpUtil {
 
     private static HttpUtil instance;
 
+    private HttpUtil() {
+    }
 
     /**
      * 创建httpUtil
@@ -69,8 +71,9 @@ public class HttpUtil {
     /**
      * 改变网络请求框架
      */
-    public static void exchange(IHttpEngine mHttpEngine) {
+    public HttpUtil exchange(IHttpEngine mHttpEngine) {
         httpEngine = mHttpEngine;
+        return this;
     }
 
     /**

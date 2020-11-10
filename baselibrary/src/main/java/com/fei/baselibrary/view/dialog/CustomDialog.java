@@ -18,7 +18,7 @@ import com.fei.baselibrary.R;
 
 /**
  * @ClassName: 自定义dialog
- * @Description: 描述
+ * @Description: 描述  链式+builder
  * @Author: Fei
  * @CreateDate: 2020/11/5 18:30
  * @UpdateUser: Fei
