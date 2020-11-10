@@ -7,9 +7,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
+import com.fei.baselibrary.http.HttpUtil;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.baselibrary.view.dialog.CustomDialog;
 import com.fei.framelibrary.base.BaseSkinActivity;
+import com.fei.framelibrary.http.HttpCallBack;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 
 import java.io.File;
@@ -68,6 +70,31 @@ public class MainActivity extends BaseSkinActivity {
 //                e.printStackTrace();
 //            }
 //        }
+
+
+        //网络请求
+        HttpUtil.with(this).get("").execute(new HttpCallBack<String>() {
+
+            @Override
+            public void onPreExecute() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess(String result) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void initView() {
         ivText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,11 +109,6 @@ public class MainActivity extends BaseSkinActivity {
                 });
             }
         });
-
-    }
-
-    @Override
-    protected void initView() {
     }
 
     @Override

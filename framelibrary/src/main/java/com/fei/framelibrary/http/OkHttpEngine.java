@@ -7,6 +7,7 @@ import com.fei.baselibrary.http.IHttpEngine;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.List;
@@ -22,7 +23,7 @@ import okhttp3.Response;
 
 /**
  * @ClassName: OkHttpEngine
- * @Description: okhttp网络请求引擎,还需要完善
+ * @Description: okhttp网络请求引擎, 还需要完善
  * @Author: Fei
  * @CreateDate: 2020-11-08 15:11
  * @UpdateUser: 更新者
@@ -96,11 +97,12 @@ public class OkHttpEngine implements IHttpEngine {
     }
 
     @Override
-    public void post(Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
+    public void post(final Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
         RequestBody requestBody = appendBody(params);
+        final WeakReference mContext = new WeakReference(context);
         Request request = new Request.Builder()
                 .url(url)
-                .tag(context)
+                .tag(mContext.get())
                 .post(requestBody)
                 .build();
 
@@ -108,12 +110,14 @@ public class OkHttpEngine implements IHttpEngine {
                 new Callback() {
                     @Override
                     public void onFailure(okhttp3.Call call, IOException e) {
+                        if (mContext.get() == null) return;
                         callBack.onError(e);
                     }
 
                     @Override
                     public void onResponse(okhttp3.Call call, Response response) throws IOException {
                         // 这个 两个回掉方法都不是在主线程中
+                        if (mContext.get() == null) return;
                         String result = response.body().string();
                         callBack.onSuccess(result);
                     }

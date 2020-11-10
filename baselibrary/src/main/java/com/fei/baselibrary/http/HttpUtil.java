@@ -3,10 +3,11 @@ package com.fei.baselibrary.http;
 import android.content.Context;
 import android.text.TextUtils;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @ClassName: HttpUtil
@@ -25,7 +26,7 @@ public class HttpUtil {
     public static final int GET = 0x002;
 
     //上下文
-    private Context mContext;
+    private static WeakReference<Context> mContext;
 
     //url
     private String mUrl;
@@ -34,17 +35,13 @@ public class HttpUtil {
     private int requestType = GET;
 
     //参数
-    private Map mParams;
+    private static Map mParams;
 
     //网络请求
     private static IHttpEngine httpEngine;
 
     private static HttpUtil instance;
 
-    private HttpUtil(Context context) {
-        mContext = context;
-        mParams = new ConcurrentHashMap();
-    }
 
     /**
      * 创建httpUtil
@@ -53,10 +50,11 @@ public class HttpUtil {
         if (instance == null) {
             synchronized (HttpUtil.class) {
                 if (instance == null) {
-                    instance = new HttpUtil(context);
+                    instance = new HttpUtil();
                 }
             }
         }
+        mContext = new WeakReference<>(context);
         return instance;
     }
 
@@ -97,6 +95,9 @@ public class HttpUtil {
      * 添加参数
      */
     public HttpUtil addParam(String key, Object value) {
+        if (mParams == null) {
+            mParams = new HashMap();
+        }
         mParams.put(key, value);
         return this;
     }
@@ -105,6 +106,9 @@ public class HttpUtil {
      * 添加所有参数
      */
     public HttpUtil addParams(Map<String, Object> params) {
+        if (mParams == null) {
+            mParams = new HashMap();
+        }
         mParams.putAll(params);
         return this;
     }
@@ -134,18 +138,18 @@ public class HttpUtil {
         }
 
         //可以添加业务逻辑代码
-        callBack.onPreExecute(mContext, mParams);
+        callBack.onPreExecute(mContext.get(), mParams);
 
         if (requestType == GET) {
-            httpEngine.get(mContext, mUrl, mParams, callBack);
+            httpEngine.get(mContext.get(), mUrl, mParams, callBack);
         } else if (requestType == POST) {
-            httpEngine.post(mContext, mUrl, mParams, callBack);
+            httpEngine.post(mContext.get(), mUrl, mParams, callBack);
         }
     }
 
 
     /**
-     * 解析一个类上面的class信息
+     * 解析一个类上面的泛型class信息
      */
     public static Class<?> analysisClazzInfo(Object object) {
         Type genType = object.getClass().getGenericSuperclass();

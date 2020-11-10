@@ -3,6 +3,8 @@ package com.fei.framelibrary.http;
 import android.content.Context;
 
 import com.fei.baselibrary.http.EngineCallBack;
+import com.fei.baselibrary.http.HttpUtil;
+import com.google.gson.Gson;
 
 import java.util.Map;
 
@@ -16,7 +18,9 @@ import java.util.Map;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public abstract class HttpCallBack implements EngineCallBack {
+public abstract class HttpCallBack<T> implements EngineCallBack {
+
+    private Gson gson = new Gson();
 
     @Override
     public void onPreExecute(Context context, Map<String, Object> params) {
@@ -34,5 +38,13 @@ public abstract class HttpCallBack implements EngineCallBack {
         onPreExecute();
     }
 
-    protected abstract void onPreExecute();
+    public abstract void onPreExecute();
+
+    @Override
+    public void onSuccess(String result) {
+        T res = (T) gson.fromJson(result, HttpUtil.analysisClazzInfo(this));
+        onSuccess(res);
+    }
+
+    public abstract void onSuccess(T result);
 }
