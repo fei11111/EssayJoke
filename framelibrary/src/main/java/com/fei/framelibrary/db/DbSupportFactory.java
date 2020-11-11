@@ -1,0 +1,60 @@
+package com.fei.framelibrary.db;
+
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
+
+import com.fei.baselibrary.utils.LogUtils;
+import com.fei.framelibrary.base.BaseSkinApplication;
+
+import java.io.File;
+
+/**
+ * @ClassName: DbSupportFactory
+ * @Description: 数据库工厂
+ * @Author: Fei
+ * @CreateDate: 2020/11/11 14:25
+ * @UpdateUser: Fei
+ * @UpdateDate: 2020/11/11 14:25
+ * @UpdateRemark: 更新说明
+ * @Version: 1.0
+ */
+public class DbSupportFactory {
+
+    private static final String TAG = "DbSupportFactory";
+
+    private SQLiteDatabase db;
+
+    private static DbSupportFactory factory;
+
+    private DbSupportFactory() {
+        File file = null;
+        if (Environment.isExternalStorageEmulated()) {
+            file = new File(BaseSkinApplication.context.getExternalCacheDir().getAbsolutePath() + "db" +
+                    File.separator + "essay.db");
+        } else {
+            file = new File(BaseSkinApplication.context.getCacheDir() + "db" +
+                    File.separator + "essay.db");
+        }
+        LogUtils.i(TAG, "数据库路径:" + file.getAbsolutePath());
+        db = SQLiteDatabase.openOrCreateDatabase(file, null);
+    }
+
+    public static DbSupportFactory getFactory() {
+        if (factory == null) {
+            synchronized (DbSupportFactory.class) {
+                if (factory == null) {
+                    factory = new DbSupportFactory();
+                }
+            }
+        }
+        return factory;
+    }
+
+    public <T> IDaoSupport<T, Long> getDao(Class<T> clazz) {
+        IDaoSupport dao = new DaoSupport(db, clazz);
+        dao.init();
+        return dao;
+    }
+
+
+}

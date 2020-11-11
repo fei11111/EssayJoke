@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.fei.baselibrary.ExceptionCrashHandler;
 import com.fei.baselibrary.http.HttpUtil;
 import com.fei.baselibrary.ioc.ViewById;
+import com.fei.baselibrary.utils.LogUtils;
 import com.fei.baselibrary.view.dialog.CustomDialog;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.http.HttpCallBack;
@@ -73,23 +74,23 @@ public class MainActivity extends BaseSkinActivity {
 
 
         //网络请求
-        HttpUtil.with(this).get("").execute(new HttpCallBack<String>() {
-
-            @Override
-            public void onPreExecute() {
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-
-            @Override
-            public void onSuccess(String result) {
-
-            }
-        });
+//        HttpUtil.with(this).get("").execute(new HttpCallBack<String>() {
+//
+//            @Override
+//            public void onPreExecute() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//
+//            }
+//        });
 
     }
 

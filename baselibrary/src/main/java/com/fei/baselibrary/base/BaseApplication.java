@@ -1,6 +1,7 @@
 package com.fei.baselibrary.base;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
 
@@ -16,9 +17,12 @@ import com.fei.baselibrary.ExceptionCrashHandler;
  */
 public abstract class BaseApplication extends Application {
 
+    public static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
         init();
     }
 
