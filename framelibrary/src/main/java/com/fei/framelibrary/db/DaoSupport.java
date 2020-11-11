@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @ClassName: DaoSupport
@@ -23,7 +24,7 @@ import java.util.Map;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class DaoSupport<T> implements IDaoSupport<T, Long> {
+class DaoSupport<T> implements IDaoSupport<T> {
 
     private static final String TAG = "DaoSupport";
 
@@ -86,8 +87,7 @@ public class DaoSupport<T> implements IDaoSupport<T, Long> {
                     put = values.getClass().getDeclaredMethod("put", String.class, type);
                     methodArrayMap.put(type.getSimpleName(), put);//将方法存入，减少找方法时间
                 }
-                put.setAccessible(true);
-                put.invoke(values, objects[0], objects[1]);//反射注入数据;
+                put.invoke(values, objects);//反射注入数据;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -114,13 +114,38 @@ public class DaoSupport<T> implements IDaoSupport<T, Long> {
     }
 
     @Override
-    public T queryForId(Long aLong) {
+    public T queryById(Long aLong) {
+        return null;
+    }
+
+    @Override
+    public List<T> query(Map<String, Object> map) {
+        String selection = null;
+        String[] selectionArgs = null;
+
+        if (map != null) {
+            selection = "";
+            selectionArgs = new String[map.size()];
+        }
+
+        Set<Map.Entry<String, Object>> entries = map.entrySet();
+        for (int i = 0; i < entries.size(); i++) {
+            Map.Entry<String, Object> entry = entries.iterator().next();
+            selection += entry.getKey();
+            Object value = DaoUtil.formatValue(entry.getValue());
+            selectionArgs[i] = value.toString();
+
+            LogUtils.i(TAG, " selection = " + selection + " selectionArgs " + selectionArgs.toString());
+        }
+
+
+//        return db.query(tableName, null, selection, selectionArgs, null, null, null);
         return null;
     }
 
     @Override
     public List<T> queryForAll() {
-        return null;
+        return query(null);
     }
 
     @Override
@@ -130,16 +155,6 @@ public class DaoSupport<T> implements IDaoSupport<T, Long> {
 
     @Override
     public int update(T data, String whereColumnName, Map<String, String> excludeColumnNameMap) {
-        return 0;
-    }
-
-    @Override
-    public int updateId(T data, Long newId) {
-        return 0;
-    }
-
-    @Override
-    public int updateId(Collection<T> datas) {
         return 0;
     }
 
@@ -159,7 +174,7 @@ public class DaoSupport<T> implements IDaoSupport<T, Long> {
     }
 
     @Override
-    public int deleteIds(Collection<Long> longs) {
+    public int deleteByIds(Collection<Long> longs) {
         return 0;
     }
 

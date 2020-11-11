@@ -1,13 +1,5 @@
 package com.fei.framelibrary.db;
 
-import android.content.ContentValues;
-import android.util.ArrayMap;
-
-import com.fei.baselibrary.utils.SPUtils;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 /**
  * @ClassName: DaoUtil
  * @Description: dao 工具类
@@ -18,7 +10,7 @@ import java.lang.reflect.Method;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class DaoUtil {
+class DaoUtil {
 
 
     /**
@@ -39,7 +31,23 @@ public class DaoUtil {
         }
     }
 
-    public static <T> void insert(T data, ContentValues values) {
+    /**
+     * 将boolean类型转成int
+     */
+    private static int convertBooleanToInt(Boolean b) {
+        if (b) return 1;
+        else return 0;
+    }
 
+    /**
+     * 获取数据，如果是boolean类型就转成int的数据返回，其它直接返回
+     */
+    public static Object formatValue(Object value) {
+        String simpleName = value.getClass().getComponentType().getSimpleName();
+        if (simpleName.equalsIgnoreCase("boolean")) {
+            return convertBooleanToInt((Boolean) value);
+        } else {
+            return value;
+        }
     }
 }

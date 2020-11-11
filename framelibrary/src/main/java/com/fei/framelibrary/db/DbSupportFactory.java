@@ -1,5 +1,6 @@
 package com.fei.framelibrary.db;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
@@ -29,11 +30,16 @@ public class DbSupportFactory {
     private DbSupportFactory() {
         File file = null;
         if (Environment.isExternalStorageEmulated()) {
-            file = new File(BaseSkinApplication.context.getExternalCacheDir().getAbsolutePath() + "db" +
+            file = new File(BaseSkinApplication.context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).
+                    getAbsolutePath() + File.separator + "db" +
                     File.separator + "essay.db");
         } else {
-            file = new File(BaseSkinApplication.context.getCacheDir() + "db" +
+            file = new File(BaseSkinApplication.context.getDir(Environment.DIRECTORY_DOCUMENTS, Context.MODE_PRIVATE).
+                    getAbsolutePath() + File.separator + "db" +
                     File.separator + "essay.db");
+        }
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
         }
         LogUtils.i(TAG, "数据库路径:" + file.getAbsolutePath());
         db = SQLiteDatabase.openOrCreateDatabase(file, null);
@@ -50,7 +56,7 @@ public class DbSupportFactory {
         return factory;
     }
 
-    public <T> IDaoSupport<T, Long> getDao(Class<T> clazz) {
+    public <T> IDaoSupport<T> getDao(Class<T> clazz) {
         IDaoSupport dao = new DaoSupport(db, clazz);
         dao.init();
         return dao;

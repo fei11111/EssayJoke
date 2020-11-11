@@ -7,15 +7,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fei.baselibrary.ExceptionCrashHandler;
-import com.fei.baselibrary.http.HttpUtil;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.baselibrary.utils.LogUtils;
 import com.fei.baselibrary.view.dialog.CustomDialog;
+import com.fei.essayjoke.model.Person;
 import com.fei.framelibrary.base.BaseSkinActivity;
-import com.fei.framelibrary.http.HttpCallBack;
+import com.fei.framelibrary.db.DbSupportFactory;
+import com.fei.framelibrary.db.IDaoSupport;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -91,6 +94,24 @@ public class MainActivity extends BaseSkinActivity {
 //
 //            }
 //        });
+
+        List<Person> persons = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            Person person = new Person();
+            person.setName("Peter");
+            person.setAge(23 + i);
+        }
+
+
+
+        long startTime = System.currentTimeMillis();
+
+        IDaoSupport<Person> dao = DbSupportFactory.getFactory().getDao(Person.class);
+        dao.insert(persons);
+
+        long endTime = System.currentTimeMillis();
+
+        LogUtils.i(TAG, "" + (endTime - startTime));
 
     }
 
