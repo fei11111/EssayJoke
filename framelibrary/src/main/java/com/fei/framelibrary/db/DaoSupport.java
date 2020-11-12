@@ -1,19 +1,15 @@
 package com.fei.framelibrary.db;
 
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.ArrayMap;
 
 import com.fei.baselibrary.utils.LogUtils;
+import com.fei.framelibrary.db.crud.DeleteSupport;
+import com.fei.framelibrary.db.crud.InsertSupport;
+import com.fei.framelibrary.db.crud.QuerySupport;
+import com.fei.framelibrary.db.crud.UpdateSupport;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @ClassName: DaoSupport
@@ -32,10 +28,11 @@ class DaoSupport<T> implements IDaoSupport<T> {
     private final SQLiteDatabase db;
     private final Class<T> clazz;
     private String tableName;
-    private Object[] objects = new Object[2];
-    private ArrayMap<String, Method> methodArrayMap = new ArrayMap<>();//存放ContentValues的重载put方法
-    private ArrayMap<String, Class<?>> fieldArrayMap = new ArrayMap<>();//存放所有属性的数据库存放类型
-
+    private DeleteSupport<T> deleteSupport;
+    private QuerySupport<T> querySupport;
+    private InsertSupport<T> insertSupport;
+    private UpdateSupport<T> updateSupport;
+    private final ArrayMap<String, Class<?>> fieldArrayMap = new ArrayMap<>();
 
     public DaoSupport(SQLiteDatabase db, Class<T> clazz) {
         this.db = db;
@@ -76,112 +73,41 @@ class DaoSupport<T> implements IDaoSupport<T> {
     }
 
     @Override
-    public long insert(T data) {
-        ContentValues values = new ContentValues();
-        Field[] declaredFields = data.getClass().getDeclaredFields();
-        for (Field field : declaredFields) {
-            field.setAccessible(true);
-            objects[0] = field.getName();
-            try {
-                objects[1] = field.get(data);
-                String simpleName = field.getType().getSimpleName();
-                Class<?> fieldClass = fieldArrayMap.get(objects[0]);
-                if (fieldClass == null) throw new IllegalArgumentException("数据类型错误");
-                Method put = methodArrayMap.get(simpleName);
-                if (put == null) {
-                    put = values.getClass().getDeclaredMethod("put", String.class, fieldClass);
-                    methodArrayMap.put(simpleName, put);//将方法存入，减少找方法时间
-                }
-                put.invoke(values, objects);//反射注入数据;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } finally {
-                objects[0] = null;
-                objects[1] = null;
-            }
+    public InsertSupport<T> getInsertSupport() {
+        if (insertSupport == null) {
+            insertSupport = new InsertSupport<>(db, tableName, fieldArrayMap);
         }
-        return db.insert(tableName, null, values);
+        return insertSupport;
     }
 
+
     @Override
-    public long insert(List<T> datas) {
-        db.beginTransaction();
-        for (T data : datas) {
-            insert(data);
+    public QuerySupport<T> getQuerySupport() {
+        if (querySupport == null) {
+            querySupport = new QuerySupport<>(db, tableName, clazz);
         }
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        return datas.size();
+        return querySupport;
     }
 
     @Override
-    public T queryById(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public List<T> query(Map<String, Object> map) {
-        String selection = null;
-        String[] selectionArgs = null;
-
-        if (map != null) {
-            selection = "";
-            selectionArgs = new String[map.size()];
-            Set<Map.Entry<String, Object>> entries = map.entrySet();
-            for (int i = 0; i < entries.size(); i++) {
-                Map.Entry<String, Object> entry = entries.iterator().next();
-                selection += entry.getKey();
-                Object value = DaoUtil.formatValue(entry.getValue());
-                selectionArgs[i] = value.toString();
-
-                LogUtils.i(TAG, " selection = " + selection + " selectionArgs " + selectionArgs.toString());
-            }
+    public DeleteSupport<T> getDeleteSupport() {
+        if (deleteSupport == null) {
+            deleteSupport = new DeleteSupport<>(db, tableName);
         }
-        Cursor query = db.query(tableName, null, selection, selectionArgs, null, null, null);
-        return DaoUtil.covertQueryToList(query,clazz);
+        return deleteSupport;
     }
 
     @Override
-    public List<T> queryForAll() {
-        return query(null);
+    public UpdateSupport<T> getUpdateSupport() {
+        if (updateSupport == null) {
+            updateSupport = new UpdateSupport<>(db, tableName);
+        }
+        return updateSupport;
     }
 
-    @Override
-    public int update(T data) {
-        return 0;
-    }
-
-    @Override
-    public int update(T data, String whereColumnName, Map<String, String> excludeColumnNameMap) {
-        return 0;
-    }
-
-    @Override
-    public int delete(T data) {
-        return 0;
-    }
-
-    @Override
-    public int deleteById(Long aLong) {
-        return 0;
-    }
-
-    @Override
-    public int delete(Collection<T> datas) {
-        return 0;
-    }
-
-    @Override
-    public int deleteByIds(Collection<Long> longs) {
-        return 0;
-    }
 
     @Override
     public void dropTable() {
-
+        db.execSQL("drop table " + tableName);
     }
 }

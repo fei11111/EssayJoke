@@ -107,7 +107,7 @@ public class MainActivity extends BaseSkinActivity {
         IDaoSupport<Person> dao = DbSupportFactory.getFactory().getDao(Person.class);
 //        long insert = dao.insert(persons);
 //        LogUtils.i(TAG, "插入" + insert);
-        List<Person> people = dao.queryForAll();
+        List<Person> people = dao.getQuerySupport().query();
         LogUtils.i(TAG, people.toString());
         long endTime = System.currentTimeMillis();
 

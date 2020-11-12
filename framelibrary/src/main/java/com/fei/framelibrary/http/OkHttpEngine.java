@@ -3,7 +3,11 @@ package com.fei.framelibrary.http;
 import android.content.Context;
 
 import com.fei.baselibrary.http.EngineCallBack;
+import com.fei.baselibrary.http.HttpUtil;
 import com.fei.baselibrary.http.IHttpEngine;
+import com.fei.baselibrary.utils.MD5Util;
+import com.fei.framelibrary.db.DbSupportFactory;
+import com.fei.framelibrary.db.IDaoSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,20 +96,94 @@ public class OkHttpEngine implements IHttpEngine {
 
 
     @Override
-    public void get(Context context, String url, Map<String, Object> params, EngineCallBack callBack) {
+    public void get(boolean cache, Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
+        url = HttpUtil.jointParams(url, params);
+        WeakReference mContext = new WeakReference(context);
+        if (cache) {
+            //1.需要缓存，通过url，加密转成key
+            String key = MD5Util.getMd5(url);
+            //2.去数据库查询
+            IDaoSupport<CacheData> dao = DbSupportFactory.getFactory().getDao(CacheData.class);
+            List<CacheData> list = dao.getQuerySupport().only("key", key).query();
+            //3.如果有结果直接返回
+            String value = "";
+            if (list != null && list.size() > 0) {
+                CacheData data = list.get(0);
+                value = data.getValue();
+                callBack.onSuccess(value);
+            }
+            //4.网络请求
+            Request request = get(url, mContext);
+            execute(mContext, request, callBack, key, value, dao);
+        } else {
+            Request request = get(url, mContext);
+            execute(mContext, request, callBack);
+        }
+
 
     }
 
     @Override
-    public void post(final Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
-        RequestBody requestBody = appendBody(params);
+    public void post(boolean cache, final Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
         final WeakReference mContext = new WeakReference(context);
-        Request request = new Request.Builder()
+        if (cache) {
+            //1.需要缓存，通过url，加密转成key
+            String key = HttpUtil.jointParams(url, params);
+            key = MD5Util.getMd5(key);
+            //2.去数据库查询
+            IDaoSupport<CacheData> dao = DbSupportFactory.getFactory().getDao(CacheData.class);
+            List<CacheData> list = dao.getQuerySupport().only("key", key).query();
+            //3.如果有结果直接返回
+            String value = "";
+            if (list != null && list.size() > 0) {
+                CacheData data = list.get(0);
+                value = data.getValue();
+                callBack.onSuccess(value);
+            }
+            //4.网络请求
+            Request request = post(url, mContext, params);
+            execute(mContext, request, callBack, key, value, dao);
+        } else {
+            Request request = post(url, mContext, params);
+            execute(mContext, request, callBack);
+        }
+
+    }
+
+    /**
+     * 创建get请求
+     */
+    private Request get(String url, WeakReference mContext) {
+        return new Request.Builder()
+                .url(url)
+                .tag(mContext.get())
+                .get()
+                .build();
+    }
+
+    /**
+     * 创建post请求
+     */
+    private Request post(String url, WeakReference mContext, Map<String, Object> params) {
+        RequestBody requestBody = appendBody(params);
+        return new Request.Builder()
                 .url(url)
                 .tag(mContext.get())
                 .post(requestBody)
                 .build();
+    }
 
+    /**
+     * 发起请求
+     */
+    private void execute(final WeakReference mContext, Request request, final EngineCallBack callBack) {
+        execute(mContext, request, callBack, null, null, null);
+    }
+
+    /**
+     * 发起请求，并保持到数据库
+     */
+    private void execute(final WeakReference mContext, final Request request, final EngineCallBack callBack, final String key, final String value, final IDaoSupport<CacheData> dao) {
         mOkHttpClient.newCall(request).enqueue(
                 new Callback() {
                     @Override
@@ -119,6 +197,19 @@ public class OkHttpEngine implements IHttpEngine {
                         // 这个 两个回掉方法都不是在主线程中
                         if (mContext.get() == null) return;
                         String result = response.body().string();
+
+                        if (dao != null && key != null && value != null) {
+                            //1.比较数据是否相同
+                            if (!request.equals(value)) {
+                                //2.不同则删除以前的，保存新数据
+                                dao.getDeleteSupport().where("key", key).delete();
+                                CacheData cacheData = new CacheData();
+                                cacheData.setKey(key);
+                                cacheData.setValue(result);
+                                dao.getInsertSupport().insert(cacheData);
+                            }
+                        }
+
                         callBack.onSuccess(result);
                     }
                 }

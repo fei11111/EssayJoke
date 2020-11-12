@@ -3,12 +3,16 @@ package com.fei.framelibrary.db;
 import android.database.Cursor;
 import android.util.ArrayMap;
 
+import com.fei.baselibrary.utils.LogUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @ClassName: DaoUtil
@@ -20,7 +24,7 @@ import java.util.List;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-class DaoUtil {
+public class DaoUtil<T> {
 
     private static final String TAG = "DaoUtil";
 
@@ -161,8 +165,27 @@ class DaoUtil {
                 query.close();
             }
         }
-
-
         return list;
+    }
+
+    /**
+     * 将map转化成条件参数
+     */
+    public static void covertMapToParams(Map<String, Object> map, String selection, String[] selectionArgs) {
+        if (map != null) {
+            selection = "";
+            selectionArgs = new String[map.size()];
+            Set<Map.Entry<String, Object>> entries = map.entrySet();
+            for (int i = 0; i < entries.size(); i++) {
+                Map.Entry<String, Object> entry = entries.iterator().next();
+                selection += entry.getKey() + " = ? and";
+                Object value = DaoUtil.formatValue(entry.getValue());
+                selectionArgs[i] = value.toString();
+            }
+            if (selection != null && selection.length() > 3) {
+                selection = selection.substring(selection.length() - 3, selection.length());
+            }
+            LogUtils.i(TAG, " selection = " + selection + " selectionArgs " + selectionArgs.toString());
+        }
     }
 }

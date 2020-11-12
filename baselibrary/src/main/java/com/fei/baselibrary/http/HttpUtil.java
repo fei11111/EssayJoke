@@ -3,11 +3,16 @@ package com.fei.baselibrary.http;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
+import com.fei.baselibrary.utils.LogUtils;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @ClassName: HttpUtil 链式
@@ -22,6 +27,7 @@ import java.util.Map;
 
 public class HttpUtil {
 
+    private static final String TAG = "HttpUtil";
     public static final int POST = 0x001;
     public static final int GET = 0x002;
 
@@ -39,6 +45,9 @@ public class HttpUtil {
 
     //网络请求
     private static IHttpEngine httpEngine;
+
+    //是否缓存
+    private boolean cache;
 
     private static HttpUtil instance;
 
@@ -116,6 +125,11 @@ public class HttpUtil {
         return this;
     }
 
+    public HttpUtil cache(boolean mCache) {
+        cache = mCache;
+        return this;
+    }
+
     /**
      * 执行
      */
@@ -144,9 +158,9 @@ public class HttpUtil {
         callBack.onPreExecute(mContext.get(), mParams);
 
         if (requestType == GET) {
-            httpEngine.get(mContext.get(), mUrl, mParams, callBack);
+            httpEngine.get(cache, mContext.get(), mUrl, mParams, callBack);
         } else if (requestType == POST) {
-            httpEngine.post(mContext.get(), mUrl, mParams, callBack);
+            httpEngine.post(cache, mContext.get(), mUrl, mParams, callBack);
         }
     }
 
@@ -160,4 +174,22 @@ public class HttpUtil {
         return (Class<?>) params[0];
     }
 
+    /**
+     * 拼接url
+     */
+    public static String jointParams(@NonNull String url, Map<String, Object> params) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(url);
+        if (params != null) {
+            sb.append("?");
+            Set<Map.Entry<String, Object>> entries = params.entrySet();
+            for (Map.Entry<String, Object> entry : entries) {
+                sb.append(entry.getKey() + "=" + entry.getValue());
+                sb.append("&");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        LogUtils.i(TAG, sb.toString());
+        return sb.toString();
+    }
 }
