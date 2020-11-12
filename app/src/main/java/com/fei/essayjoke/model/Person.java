@@ -14,6 +14,7 @@ public class Person {
 
     private String name;
     private int age;
+    private boolean isCheck;
 
     public String getName() {
         return name;
@@ -29,5 +30,22 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", isCheck=" + isCheck +
+                '}';
     }
 }

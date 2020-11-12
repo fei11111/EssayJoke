@@ -30,8 +30,9 @@ public class DbSupportFactory {
     private DbSupportFactory() {
         File file = null;
         if (Environment.isExternalStorageEmulated()) {
-            file = new File(BaseSkinApplication.context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).
-                    getAbsolutePath() + File.separator + "db" +
+            file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +
+                    BaseSkinApplication.context.getPackageName()
+                    + File.separator + "db" +
                     File.separator + "essay.db");
         } else {
             file = new File(BaseSkinApplication.context.getDir(Environment.DIRECTORY_DOCUMENTS, Context.MODE_PRIVATE).
@@ -40,6 +41,7 @@ public class DbSupportFactory {
         }
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
+            LogUtils.i(TAG, "新建数据库文件夹");
         }
         LogUtils.i(TAG, "数据库路径:" + file.getAbsolutePath());
         db = SQLiteDatabase.openOrCreateDatabase(file, null);

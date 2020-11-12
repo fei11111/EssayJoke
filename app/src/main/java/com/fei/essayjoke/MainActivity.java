@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fei.baselibrary.ExceptionCrashHandler;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.baselibrary.utils.LogUtils;
 import com.fei.baselibrary.view.dialog.CustomDialog;
@@ -16,8 +15,6 @@ import com.fei.framelibrary.db.DbSupportFactory;
 import com.fei.framelibrary.db.IDaoSupport;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseSkinActivity {
@@ -32,7 +29,7 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
         //异常处理
-        File crashFile = ExceptionCrashHandler.getInstance().getCrashFile();
+//        File crashFile = ExceptionCrashHandler.getInstance().getCrashFile();
 //        if (crashFile.exists()) {
 //            //上传到服务器
 //            try {
@@ -94,21 +91,24 @@ public class MainActivity extends BaseSkinActivity {
 //
 //            }
 //        });
-
-        List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
-            Person person = new Person();
-            person.setName("Peter");
-            person.setAge(23 + i);
-        }
-
+//
+//        List<Person> persons = new ArrayList<>();
+//        for (int i = 0; i < 10000; i++) {
+//            Person person = new Person();
+//            person.setName("Peter");
+//            person.setAge(23 + i);
+//            person.setCheck(true);
+//            persons.add(person);
+//        }
 
 
         long startTime = System.currentTimeMillis();
 
         IDaoSupport<Person> dao = DbSupportFactory.getFactory().getDao(Person.class);
-        dao.insert(persons);
-
+//        long insert = dao.insert(persons);
+//        LogUtils.i(TAG, "插入" + insert);
+        List<Person> people = dao.queryForAll();
+        LogUtils.i(TAG, people.toString());
         long endTime = System.currentTimeMillis();
 
         LogUtils.i(TAG, "" + (endTime - startTime));

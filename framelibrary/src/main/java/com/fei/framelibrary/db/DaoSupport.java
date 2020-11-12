@@ -1,6 +1,7 @@
 package com.fei.framelibrary.db;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.ArrayMap;
 
@@ -32,7 +33,8 @@ class DaoSupport<T> implements IDaoSupport<T> {
     private final Class<T> clazz;
     private String tableName;
     private Object[] objects = new Object[2];
-    private ArrayMap<String, Method> methodArrayMap = new ArrayMap<>();
+    private ArrayMap<String, Method> methodArrayMap = new ArrayMap<>();//存放ContentValues的重载put方法
+    private ArrayMap<String, Class<?>> fieldArrayMap = new ArrayMap<>();//存放所有属性的数据库存放类型
 
 
     public DaoSupport(SQLiteDatabase db, Class<T> clazz) {
@@ -53,7 +55,7 @@ class DaoSupport<T> implements IDaoSupport<T> {
                 + "flag boolean)";*/
         tableName = clazz.getSimpleName();
         StringBuilder sb = new StringBuilder();
-        sb.append("create table if not exists ").append(tableName).append(" ( id" +
+        sb.append("create table if not exists ").append(tableName).append("(id" +
                 " integer primary key autoincrement, ");
         //获取类所有属性进行遍历
         Field[] declaredFields = clazz.getDeclaredFields();
@@ -61,11 +63,12 @@ class DaoSupport<T> implements IDaoSupport<T> {
             field.setAccessible(true);
             String name = field.getName();
             String type = field.getType().getSimpleName();//类型
-            String dbType = DaoUtil.covertTypeToDbType(type);
-            if (dbType == null) {
+            Class<?> fieldClass = DaoUtil.covertTypeToObjectType(type);
+            if (fieldClass == null) {
                 throw new IllegalArgumentException("数据类型错误");
             }
-            sb.append(name + " " + dbType + ", ");
+            fieldArrayMap.put(name, fieldClass);
+            sb.append(name + " " + fieldClass.getSimpleName() + ", ");
         }
         sb.replace(sb.length() - 2, sb.length(), ")");
         LogUtils.i(TAG, sb.toString());
@@ -81,11 +84,13 @@ class DaoSupport<T> implements IDaoSupport<T> {
             objects[0] = field.getName();
             try {
                 objects[1] = field.get(data);
-                Class<?> type = objects[1].getClass().getComponentType();
-                Method put = methodArrayMap.get(type.getSimpleName());
+                String simpleName = field.getType().getSimpleName();
+                Class<?> fieldClass = fieldArrayMap.get(objects[0]);
+                if (fieldClass == null) throw new IllegalArgumentException("数据类型错误");
+                Method put = methodArrayMap.get(simpleName);
                 if (put == null) {
-                    put = values.getClass().getDeclaredMethod("put", String.class, type);
-                    methodArrayMap.put(type.getSimpleName(), put);//将方法存入，减少找方法时间
+                    put = values.getClass().getDeclaredMethod("put", String.class, fieldClass);
+                    methodArrayMap.put(simpleName, put);//将方法存入，减少找方法时间
                 }
                 put.invoke(values, objects);//反射注入数据;
             } catch (IllegalAccessException e) {
@@ -126,21 +131,18 @@ class DaoSupport<T> implements IDaoSupport<T> {
         if (map != null) {
             selection = "";
             selectionArgs = new String[map.size()];
+            Set<Map.Entry<String, Object>> entries = map.entrySet();
+            for (int i = 0; i < entries.size(); i++) {
+                Map.Entry<String, Object> entry = entries.iterator().next();
+                selection += entry.getKey();
+                Object value = DaoUtil.formatValue(entry.getValue());
+                selectionArgs[i] = value.toString();
+
+                LogUtils.i(TAG, " selection = " + selection + " selectionArgs " + selectionArgs.toString());
+            }
         }
-
-        Set<Map.Entry<String, Object>> entries = map.entrySet();
-        for (int i = 0; i < entries.size(); i++) {
-            Map.Entry<String, Object> entry = entries.iterator().next();
-            selection += entry.getKey();
-            Object value = DaoUtil.formatValue(entry.getValue());
-            selectionArgs[i] = value.toString();
-
-            LogUtils.i(TAG, " selection = " + selection + " selectionArgs " + selectionArgs.toString());
-        }
-
-
-//        return db.query(tableName, null, selection, selectionArgs, null, null, null);
-        return null;
+        Cursor query = db.query(tableName, null, selection, selectionArgs, null, null, null);
+        return DaoUtil.covertQueryToList(query,clazz);
     }
 
     @Override
