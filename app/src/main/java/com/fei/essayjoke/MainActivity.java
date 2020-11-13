@@ -6,13 +6,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fei.baselibrary.http.HttpUtil;
 import com.fei.baselibrary.ioc.ViewById;
 import com.fei.baselibrary.utils.LogUtils;
 import com.fei.baselibrary.view.dialog.CustomDialog;
+import com.fei.essayjoke.model.DiscoverListResult;
 import com.fei.essayjoke.model.Person;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.db.DbSupportFactory;
 import com.fei.framelibrary.db.IDaoSupport;
+import com.fei.framelibrary.http.HttpCallBack;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 
 import java.util.List;
@@ -102,16 +105,33 @@ public class MainActivity extends BaseSkinActivity {
 //        }
 
 
-        long startTime = System.currentTimeMillis();
+//        long startTime = System.currentTimeMillis();
+//
+//        IDaoSupport<Person> dao = DbSupportFactory.getFactory().getDao(Person.class);
+////        long insert = dao.insert(persons);
+////        LogUtils.i(TAG, "插入" + insert);
+//        List<Person> people = dao.getQuerySupport().query();
+//        LogUtils.i(TAG, people.toString());
+//        long endTime = System.currentTimeMillis();
+//
+//        LogUtils.i(TAG, "" + (endTime - startTime));
 
-        IDaoSupport<Person> dao = DbSupportFactory.getFactory().getDao(Person.class);
-//        long insert = dao.insert(persons);
-//        LogUtils.i(TAG, "插入" + insert);
-        List<Person> people = dao.getQuerySupport().query();
-        LogUtils.i(TAG, people.toString());
-        long endTime = System.currentTimeMillis();
 
-        LogUtils.i(TAG, "" + (endTime - startTime));
+        HttpUtil.with(this).get("http://jd.itying.com/api/pcontent")
+                .addParam("id","5a080b2ead8b300e28e2fec9")//59f1e4919bfd8f3bd030eed6
+                .cache(true)// 读取缓存
+                .execute(new HttpCallBack<DiscoverListResult>() {
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+
+            @Override
+            public void onSuccess(DiscoverListResult result) {
+
+            }
+        });
 
     }
 

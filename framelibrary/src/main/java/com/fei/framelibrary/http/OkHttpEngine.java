@@ -5,6 +5,7 @@ import android.content.Context;
 import com.fei.baselibrary.http.EngineCallBack;
 import com.fei.baselibrary.http.HttpUtil;
 import com.fei.baselibrary.http.IHttpEngine;
+import com.fei.baselibrary.utils.LogUtils;
 import com.fei.baselibrary.utils.MD5Util;
 import com.fei.framelibrary.db.DbSupportFactory;
 import com.fei.framelibrary.db.IDaoSupport;
@@ -37,17 +38,22 @@ import okhttp3.Response;
  */
 public class OkHttpEngine implements IHttpEngine {
 
-    OkHttpClient mOkHttpClient = new OkHttpClient();
+    private static final String TAG = "OkHttpEngine";
+    private OkHttpClient mOkHttpClient = new OkHttpClient();
+    public static final MediaType MEDIA_TYPE_PLAIN = MediaType.parse("text/plain;charset=utf-8");
+    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json;charset=utf-8");
+    public static final MediaType MEDIA_TYPE_STREAM = MediaType.parse("application/octet-stream");
 
     /**
      * 组装post请求参数body
      */
-    protected RequestBody appendBody(Map<String, Object> params) {
+    private RequestBody appendMultipartBody(Map<String, Object> params) {
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
         addParams(builder, params);
         return builder.build();
     }
+
 
     // 添加参数
     private void addParams(MultipartBody.Builder builder, Map<String, Object> params) {
@@ -109,6 +115,7 @@ public class OkHttpEngine implements IHttpEngine {
             String value = "";
             if (list != null && list.size() > 0) {
                 CacheData data = list.get(0);
+                LogUtils.i(TAG, "从数据库中获取到数据:" + data.toString());
                 value = data.getValue();
                 callBack.onSuccess(value);
             }
@@ -147,13 +154,13 @@ public class OkHttpEngine implements IHttpEngine {
             Request request = post(url, mContext, params);
             execute(mContext, request, callBack);
         }
-
     }
 
     /**
      * 创建get请求
      */
     private Request get(String url, WeakReference mContext) {
+        LogUtils.i(TAG, url);
         return new Request.Builder()
                 .url(url)
                 .tag(mContext.get())
@@ -165,7 +172,8 @@ public class OkHttpEngine implements IHttpEngine {
      * 创建post请求
      */
     private Request post(String url, WeakReference mContext, Map<String, Object> params) {
-        RequestBody requestBody = appendBody(params);
+        RequestBody requestBody = appendMultipartBody(params);
+        LogUtils.i(TAG, requestBody.toString());
         return new Request.Builder()
                 .url(url)
                 .tag(mContext.get())
@@ -197,16 +205,17 @@ public class OkHttpEngine implements IHttpEngine {
                         // 这个 两个回掉方法都不是在主线程中
                         if (mContext.get() == null) return;
                         String result = response.body().string();
-
+                        LogUtils.i(TAG, "请求返回" + result);
                         if (dao != null && key != null && value != null) {
                             //1.比较数据是否相同
-                            if (!request.equals(value)) {
+                            if (!result.equals(value)) {
                                 //2.不同则删除以前的，保存新数据
-                                dao.getDeleteSupport().where("key", key).delete();
+                                dao.getDeleteSupport().where("key = ?", key).delete();
                                 CacheData cacheData = new CacheData();
                                 cacheData.setKey(key);
                                 cacheData.setValue(result);
                                 dao.getInsertSupport().insert(cacheData);
+                                LogUtils.i(TAG, "插入数据库中");
                             }
                         }
 

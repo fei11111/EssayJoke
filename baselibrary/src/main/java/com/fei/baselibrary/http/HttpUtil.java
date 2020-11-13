@@ -189,7 +189,6 @@ public class HttpUtil {
             }
             sb.deleteCharAt(sb.length() - 1);
         }
-        LogUtils.i(TAG, sb.toString());
         return sb.toString();
     }
 }
