@@ -51,7 +51,8 @@ public class HttpUtil {
 
     private static HttpUtil instance;
 
-    private HttpUtil() {
+    private HttpUtil(Context context) {
+        mContext = new WeakReference<>(context);
     }
 
     /**
@@ -61,11 +62,10 @@ public class HttpUtil {
         if (instance == null) {
             synchronized (HttpUtil.class) {
                 if (instance == null) {
-                    instance = new HttpUtil();
+                    instance = new HttpUtil(context);
                 }
             }
         }
-        mContext = new WeakReference<>(context);
         return instance;
     }
 
