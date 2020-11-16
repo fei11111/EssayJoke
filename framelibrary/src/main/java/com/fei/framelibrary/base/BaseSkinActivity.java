@@ -1,6 +1,7 @@
 package com.fei.framelibrary.base;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,32 +10,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.fei.baselibrary.base.BaseActivity;
+import com.fei.framelibrary.skin.SkinAttr;
+import com.fei.framelibrary.skin.SkinManager;
+import com.fei.framelibrary.skin.SkinView;
+import com.fei.framelibrary.skin.callback.SkinCallback;
+import com.fei.framelibrary.skin.support.SkinCompatViewInflater;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.R;
 import androidx.core.view.LayoutInflaterCompat;
 
-import com.fei.baselibrary.base.BaseActivity;
-import com.fei.baselibrary.utils.LogUtils;
-import com.fei.framelibrary.skin.SkinCompatViewInflater;
-
-import org.xmlpull.v1.XmlPullParser;
-
 import static androidx.appcompat.widget.VectorEnabledTintResources.MAX_SDK_WHERE_REQUIRED;
 
 
-public abstract class BaseSkinActivity extends BaseActivity implements LayoutInflater.Factory {
+public abstract class BaseSkinActivity extends BaseActivity implements LayoutInflater.Factory, SkinCallback {
 
     private static final String TAG = "BaseSkinActivity";
-    /**
-     * 源码的方法不能调用，直接将源码拷过来，并修改访问修饰符
-     **/
+    //源码的createView方法为final无法调用，直接将源码拷过来，并修改访问修饰符
     private SkinCompatViewInflater mAppCompatViewInflater;
     private static final boolean IS_PRE_LOLLIPOP = Build.VERSION.SDK_INT < 21;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        //，拦截绘制过程，获取界面所有View
+        //拦截绘制过程，获取界面所有View
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LayoutInflaterCompat.setFactory2(layoutInflater, this);
         super.onCreate(savedInstanceState);//先于系统拦截
@@ -90,17 +95,55 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
                 false && Build.VERSION.SDK_INT <= MAX_SDK_WHERE_REQUIRED /* Only tint wrap the context if enabled */
         );
 
-        //1.通过属性名判断是否需要改变皮肤
-        //2.根据属性值获取资源名
-        //3.创建SkinView
-        //4.存放入SkinManager管理
+        //获取满足要求的属性
+        List<SkinAttr> array = new ArrayList<>();
         if (view != null) {
             for (int i = 0; i < attrs.getAttributeCount(); i++) {
-                LogUtils.i(TAG, "attr " + attrs.getAttributeName(i) + " " + attrs.getAttributeValue(i));
+                //1.获取属性名、属性值,属性值是@2123123
+                String attributeName = attrs.getAttributeName(i);
+                String attributeValue = attrs.getAttributeValue(i);
+                //2.必须是@开头的属性值才能换肤，根据属性值@2123123获取资源名getResourceEntryName，资源类型getResourceTypeName
+                if (attributeValue.startsWith("@")) {
+                    //2.1获取所有@开头的属性
+                    array.add(createSkinAttr(attributeValue));
+                }
+            }
+            //3.创建SkinView
+            if (array.size() > 0) {
+                SkinView skinView = new SkinView(view, array);
+                //4.存放入SkinManager管理
+                SkinManager.getInstance().register(this, skinView);
             }
         }
 
 
         return view;
+    }
+
+    /**
+     * 生成自定义属性
+     * 必须是@开头的属性值才能换肤，根据属性值@2123123获取资源名getResourceEntryName，资源类型getResourceTypeName
+     */
+    private SkinAttr createSkinAttr(String attributeValue) {
+        //获取该app资源类
+        Resources resources = getResources();
+        //通过资源类获取资源名，去掉@符号
+        int index = Integer.parseInt(attributeValue.substring(1));
+        //获取资源名
+        String resourceEntryName = resources.getResourceEntryName(index);
+        //获取资源类型
+        String resourceTypeName = resources.getResourceTypeName(index);
+        return new SkinAttr(resourceEntryName, resourceTypeName);
+    }
+
+    @Override
+    protected void onDestroy() {
+        SkinManager.getInstance().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void callback(View view, SkinAttr attr, String packageName) {
+
     }
 }

@@ -1,20 +1,11 @@
 package com.fei.essayjoke;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.fei.baselibrary.utils.LogUtils;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
-
-import java.io.File;
-import java.lang.reflect.Method;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -107,7 +98,7 @@ public class MainActivity extends BaseSkinActivity {
 //
 //        LogUtils.i(TAG, "" + (endTime - startTime));
 
-//
+
 //        HttpUtil.with(this).get("http://jd.itying.com/api/pcontent")
 //                .addParam("id","5a080b2ead8b300e28e2fec9")//59f1e4919bfd8f3bd030eed6
 //                .cache(true)// 读取缓存
@@ -160,7 +151,7 @@ public class MainActivity extends BaseSkinActivity {
         return R.layout.activity_main;
     }
 
-    public void skin(View view){
+    public void skin(View view) {
         // 从服务器上下载
 //
 //        String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -169,15 +160,15 @@ public class MainActivity extends BaseSkinActivity {
 //        int result = SkinManager.getInstance().loadSkin(SkinPath);
     }
 
-    public void skin1(View view){
+    public void skin1(View view) {
         // 恢复默认
 //        int result = SkinManager.getInstance().restoreDefault();
     }
 
 
-    public void skin2(View view){
+    public void skin2(View view) {
         // 跳转
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

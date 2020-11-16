@@ -1,5 +1,7 @@
 package com.fei.framelibrary.skin;
 
+import android.view.View;
+
 /**
  * @ClassName: SkinType
  * @Description: 皮肤类型
@@ -15,21 +17,21 @@ public enum SkinType {
     //背景
     BACKGROUND("background") {
         @Override
-        public void skin(String resName) {
+        public void skin(View view, String resName, String resType, String packageName) {
 
         }
     },
     //文本颜色
     TEXT_COLOR("textColor") {
         @Override
-        public void skin(String resName) {
+        public void skin(View view, String resName, String resType, String packageName) {
 
         }
     },
     //图片
     SRC("src") {
         @Override
-        public void skin(String resName) {
+        public void skin(View view, String resName, String resType, String packageName) {
 
         }
     };
@@ -40,5 +42,5 @@ public enum SkinType {
         this.resName = resName;
     }
 
-    public abstract void skin(String resName);
+    public abstract void skin(View view,String resName,String resType,String packageName);
 }

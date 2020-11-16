@@ -10,9 +10,8 @@ package com.fei.framelibrary.skin;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class SkinResource {
 
-    /*
+   /*
     *    try {
             Resources superRes = getResources();
             //AssetManager只能反射
@@ -41,4 +40,8 @@ public class SkinResource {
             e.printStackTrace();
         }
     * */
+public class SkinResource {
+
+
+
 }

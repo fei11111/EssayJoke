@@ -1,4 +1,4 @@
-package com.fei.framelibrary.skin;
+package com.fei.framelibrary.skin.support;
 
 import android.content.Context;
 import android.content.ContextWrapper;

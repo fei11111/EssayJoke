@@ -25,9 +25,9 @@ public class SkinView {
         this.attrs = attrs;
     }
 
-    public void skin(){
+    public void skin(SkinType skinType, String packageName) {
         for (SkinAttr attr : attrs) {
-            attr.skin();
+            attr.skin(view, skinType, packageName);
         }
     }
 }
