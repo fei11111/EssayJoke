@@ -1,31 +1,22 @@
 package com.fei.essayjoke;
 
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fei.baselibrary.http.HttpUtil;
-import com.fei.baselibrary.ioc.ViewById;
 import com.fei.baselibrary.utils.LogUtils;
-import com.fei.baselibrary.view.dialog.CustomDialog;
-import com.fei.essayjoke.model.DiscoverListResult;
-import com.fei.essayjoke.model.Person;
 import com.fei.framelibrary.base.BaseSkinActivity;
-import com.fei.framelibrary.db.DbSupportFactory;
-import com.fei.framelibrary.db.IDaoSupport;
-import com.fei.framelibrary.http.HttpCallBack;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 
-import java.util.List;
+import java.io.File;
+import java.lang.reflect.Method;
 
 public class MainActivity extends BaseSkinActivity {
-
-    @ViewById(R.id.tv_text)
-    private TextView tvText;
-    @ViewById(R.id.iv_text)
-    private ImageView ivText;
 
     private static final String TAG = "MainActivity";
 
@@ -116,41 +107,41 @@ public class MainActivity extends BaseSkinActivity {
 //
 //        LogUtils.i(TAG, "" + (endTime - startTime));
 
-
-        HttpUtil.with(this).get("http://jd.itying.com/api/pcontent")
-                .addParam("id","5a080b2ead8b300e28e2fec9")//59f1e4919bfd8f3bd030eed6
-                .cache(true)// 读取缓存
-                .execute(new HttpCallBack<DiscoverListResult>() {
-            @Override
-            public void onError(Exception e) {
-
-            }
-
-
-            @Override
-            public void onSuccess(DiscoverListResult result) {
-
-            }
-        });
+//
+//        HttpUtil.with(this).get("http://jd.itying.com/api/pcontent")
+//                .addParam("id","5a080b2ead8b300e28e2fec9")//59f1e4919bfd8f3bd030eed6
+//                .cache(true)// 读取缓存
+//                .execute(new HttpCallBack<DiscoverListResult>() {
+//            @Override
+//            public void onError(Exception e) {
+//
+//            }
+//
+//
+//            @Override
+//            public void onSuccess(DiscoverListResult result) {
+//
+//            }
+//        });
 
     }
 
     @Override
     protected void initView() {
-        ivText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CustomDialog dialog = new CustomDialog.Builder(MainActivity.this)
-                        .setContentView(R.layout.dialog_comment_detail).setText(R.id.submit_btn, "接收").show();
-                final EditText editText = dialog.getView(R.id.comment_editor);
-                dialog.setOnClickListener(R.id.submit_btn, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+//        ivText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CustomDialog dialog = new CustomDialog.Builder(MainActivity.this)
+//                        .setContentView(R.layout.dialog_comment_detail).setText(R.id.submit_btn, "接收").show();
+//                final EditText editText = dialog.getView(R.id.comment_editor);
+//                dialog.setOnClickListener(R.id.submit_btn, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(MainActivity.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
     }
 
     @Override
@@ -167,6 +158,27 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected int getLayoutRes() {
         return R.layout.activity_main;
+    }
+
+    public void skin(View view){
+        // 从服务器上下载
+//
+//        String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
+//                +File.separator +"red.skin";
+//        // 换肤
+//        int result = SkinManager.getInstance().loadSkin(SkinPath);
+    }
+
+    public void skin1(View view){
+        // 恢复默认
+//        int result = SkinManager.getInstance().restoreDefault();
+    }
+
+
+    public void skin2(View view){
+        // 跳转
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
 
 

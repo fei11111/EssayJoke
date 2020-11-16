@@ -28,20 +28,47 @@ import java.util.Map;
 public class SPUtils {
     /**
      * 保存在手机里面的文件名
-     *
      */
-    public static final String FILE_NAME = "fei_share_data";
+    private static final String FILE_NAME = "fei_share_data";
+
+    private static String fileName = "";
+
+    private static SPUtils instance;
+    private Context mContext;
+
+    public SPUtils(Context mContext) {
+        this.mContext = mContext.getApplicationContext();
+    }
+
+    public static SPUtils getInstance(Context mContext) {
+        if (instance == null) {
+            synchronized (SPUtils.class) {
+                if (instance == null) {
+                    instance = new SPUtils(mContext);
+                }
+            }
+        }
+        fileName = FILE_NAME;
+        return instance;
+    }
+
+    /**
+     * 初始化文件名
+     */
+    public void init(String fileName) {
+        this.fileName = fileName;
+    }
+
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
      *
-     * @param context
      * @param key
      * @param object
      */
-    public static void put(Context context, String key, Object object) {
+    public void put(String key, Object object) {
 
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
+        SharedPreferences sp = mContext.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -61,7 +88,7 @@ public class SPUtils {
         SharedPreferencesCompat.apply(editor);
     }
 
-    private static String formatToString(Object object) {
+    private String formatToString(Object object) {
         String objectVal = null;
         //创建字节输出流
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -91,14 +118,12 @@ public class SPUtils {
 
     /**
      * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
-     *
-     * @param context
      * @param key
      * @param defaultObject
      * @return
      */
-    public static Object get(Context context, String key, Object defaultObject) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
+    public Object get(String key, Object defaultObject) {
+        SharedPreferences sp = mContext.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
 
         if (defaultObject instanceof String) {
@@ -116,7 +141,7 @@ public class SPUtils {
         }
     }
 
-    private static Object formatToObject(String objectVal) {
+    private Object formatToObject(String objectVal) {
         if (objectVal == null) return null;
         byte[] buffer = Base64.decode(objectVal, Base64.DEFAULT);
         //一样通过读取字节流，创建字节流输入流，写入对象并作强制转换
@@ -149,11 +174,10 @@ public class SPUtils {
     /**
      * 移除某个key值已经对应的值
      *
-     * @param context
      * @param key
      */
-    public static void remove(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
+    public void remove(String key) {
+        SharedPreferences sp = mContext.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(key);
@@ -163,10 +187,9 @@ public class SPUtils {
     /**
      * 清除所有数据
      *
-     * @param context
      */
-    public static void clear(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
+    public void clear() {
+        SharedPreferences sp = mContext.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
@@ -180,7 +203,7 @@ public class SPUtils {
      * @param key
      * @return
      */
-    public static boolean contains(Context context, String key) {
+    public boolean contains(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
         return sp.contains(key);
@@ -192,7 +215,7 @@ public class SPUtils {
      * @param context
      * @return
      */
-    public static Map<String, ?> getAll(Context context) {
+    public Map<String, ?> getAll(Context context) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
         return sp.getAll();

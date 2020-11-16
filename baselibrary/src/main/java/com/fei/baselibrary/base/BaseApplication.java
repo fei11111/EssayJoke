@@ -3,7 +3,7 @@ package com.fei.baselibrary.base;
 import android.app.Application;
 import android.content.Context;
 
-import com.fei.baselibrary.ExceptionCrashHandler;
+import com.fei.baselibrary.crash.ExceptionCrashHandler;
 
 /**
  * @ClassName: BaseApplication

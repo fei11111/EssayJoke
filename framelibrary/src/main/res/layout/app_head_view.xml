@@ -22,15 +22,15 @@
                 android:id="@+id/iv_head_left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/selector_head_left_arrow"/>
+                android:src="@drawable/selector_head_left_arrow" />
 
             <TextView
                 android:id="@+id/tv_head_left"
-                style="@style/Font15Style"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/selector_color_white_to_gray"
+                android:textSize="@dimen/tx_15"
                 android:visibility="gone" />
 
         </FrameLayout>
@@ -57,7 +57,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/size_10"
                     android:scaleType="centerCrop"
-                  android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/iv_head_right_one"
@@ -72,13 +72,13 @@
 
             <TextView
                 android:id="@+id/tv_head_right"
-                style="@style/Font15Style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="@dimen/size_5"
                 android:paddingRight="@dimen/size_5"
                 android:textColor="@color/selector_color_white_to_gray"
+                android:textSize="@dimen/tx_15"
                 android:visibility="gone" />
 
         </FrameLayout>
@@ -100,7 +100,6 @@
 
                 <EditText
                     android:id="@+id/et_search"
-                    style="@style/Font12Style"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/shape_search_bg"
@@ -111,7 +110,8 @@
                     android:paddingLeft="@dimen/size_30"
                     android:paddingRight="@dimen/size_30"
                     android:textColor="@color/color_text"
-                    android:textColorHint="@color/color_text_sub" />
+                    android:textColorHint="@color/color_text_sub"
+                    android:textSize="@dimen/tx_12" />
 
                 <ImageView
                     android:id="@+id/iv_search"
@@ -134,13 +134,13 @@
 
             <TextView
                 android:id="@+id/tv_title"
-                style="@style/Font20Style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="1"
-                android:textColor="@color/color_white" />
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/tx_20" />
 
         </FrameLayout>
 

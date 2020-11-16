@@ -1,10 +1,9 @@
-package com.fei.baselibrary;
+package com.fei.baselibrary.crash;
 
 import android.content.Context;
 
 import com.fei.baselibrary.utils.DeviceUtil;
 import com.fei.baselibrary.utils.LogUtils;
-import com.fei.baselibrary.utils.SPUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +33,7 @@ public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
     private Thread.UncaughtExceptionHandler handler;
     private static final String TAG = "ExceptionCrashHandler";
 
+
     public static ExceptionCrashHandler getInstance() {
         if (instance == null) {
             synchronized (ExceptionCrashHandler.class) {
@@ -57,7 +57,7 @@ public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
         //写入本地文件
         String fileName = saveInfoToSD(e);
         // 保存当前文件，等应用再次启动在上传
-        LogUtils.i(TAG,fileName);
+        LogUtils.i(TAG, fileName);
         cacheCrashFile(fileName);
         //交给系统处理Exception
         handler.uncaughtException(t, e);
@@ -67,15 +67,14 @@ public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
      * 缓存异常文件
      */
     private void cacheCrashFile(String fileName) {
-        SPUtils.put(context, "CRASH_FILE_NAME", fileName);
+        CrashPreUtil.getInstance(context).put(CrashConfig.CRASH_KEY, fileName);
     }
 
     /**
      * 获取异常文件
      */
     public File getCrashFile() {
-        String fileName = SPUtils.get(context, "CRASH_FILE_NAME", "").toString();
-        return new File(fileName);
+        return new File(CrashPreUtil.getInstance(context).get(CrashConfig.CRASH_KEY).toString());
     }
 
 
@@ -104,8 +103,8 @@ public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
         if (!dirFile.exists()) {
             dirFile.mkdirs();
         }
-        File file = new File(dirFile,fileName);
-        LogUtils.i(TAG,file.getName());
+        File file = new File(dirFile, fileName);
+        LogUtils.i(TAG, file.getName());
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file.getAbsolutePath());

@@ -1,16 +1,6 @@
 package com.fei.essayjoke;
 
-import android.app.Application;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.fei.baselibrary.ExceptionCrashHandler;
-import com.fei.baselibrary.fix.FixManager;
 import com.fei.framelibrary.base.BaseSkinApplication;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @ClassName: BaseApplication
