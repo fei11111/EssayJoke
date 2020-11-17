@@ -50,7 +50,30 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
      */
     @Override
     public final View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        return createView(parent, name, context, attrs);
+        View view = createView(parent, name, context, attrs);
+        //获取满足要求的属性
+        if (view != null) {
+            List<SkinAttr> array = new ArrayList<>();
+            for (int i = 0; i < attrs.getAttributeCount(); i++) {
+                //1.获取属性名、属性值,属性值是android:src="@2123123"
+                //src为属性名，@2123123为属性值
+                attrs.getAttributeNameResource(i);
+                String attributeName = attrs.getAttributeName(i);
+                String attributeValue = attrs.getAttributeValue(i);
+                //2.必须是@开头的属性值才能换肤，根据属性值@2123123获取资源名getResourceEntryName，资源类型getResourceTypeName
+                if (attributeValue.startsWith("@")) {
+                    //2.1获取所有@开头的属性
+                    array.add(createSkinAttr(attributeName, attributeValue));
+                }
+            }
+            //3.创建SkinView
+            if (array.size() > 0) {
+                SkinView skinView = new SkinView(view, array);
+                //4.存放入SkinManager管理，并判断是否需要换肤
+                SkinManager.getInstance(this).register(this, skinView);
+            }
+        }
+        return view;
     }
 
     /**
@@ -89,37 +112,11 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
                     : true;
         }
 
-        View view = mAppCompatViewInflater.createView(parent, name, context, attrs, inheritContext,
+        return mAppCompatViewInflater.createView(parent, name, context, attrs, inheritContext,
                 IS_PRE_LOLLIPOP, /* Only read android:theme pre-L (L+ handles this anyway) */
                 true, /* Read read app:theme as a fallback at all times for legacy reasons */
                 false && Build.VERSION.SDK_INT <= MAX_SDK_WHERE_REQUIRED /* Only tint wrap the context if enabled */
         );
-
-        //获取满足要求的属性
-        List<SkinAttr> array = new ArrayList<>();
-        if (view != null) {
-            for (int i = 0; i < attrs.getAttributeCount(); i++) {
-                //1.获取属性名、属性值,属性值是android:src="@2123123"
-                //src为属性名，@2123123为属性值
-                attrs.getAttributeNameResource(i);
-                String attributeName = attrs.getAttributeName(i);
-                String attributeValue = attrs.getAttributeValue(i);
-                //2.必须是@开头的属性值才能换肤，根据属性值@2123123获取资源名getResourceEntryName，资源类型getResourceTypeName
-                if (attributeValue.startsWith("@")) {
-                    //2.1获取所有@开头的属性
-                    array.add(createSkinAttr(attributeName, attributeValue));
-                }
-            }
-            //3.创建SkinView
-            if (array.size() > 0) {
-                SkinView skinView = new SkinView(view, array);
-                //4.存放入SkinManager管理，并判断是否需要换肤
-                SkinManager.getInstance(this).register(this, skinView);
-            }
-        }
-
-
-        return view;
     }
 
     /**

@@ -63,22 +63,26 @@ public class SkinManager {
 
         //1.从sp获取换肤文件路径
         String path = SkinPreUtil.getInstance(context).get();
-        //2.如果不为空，则设置需要换肤标识
-        //3.资源获取类
+        //2.资源获取类
         skinResource = new SkinResource(context);
         if (!TextUtils.isEmpty(path)) {
             if (!new File(path).exists()) {
+                LogUtils.i(TAG, "皮肤文件不存在");
                 SkinPreUtil.getInstance(context).clear();
                 return;
             }
-            isNeedSkin = true;
-            //4.获取皮肤包名
+            //3.获取皮肤包名
             packageName = DeviceUtil.getApkPackageName(context, path);
-            //创建皮肤资源类
+            if (TextUtils.isEmpty(packageName)) {
+                SkinPreUtil.getInstance(context).clear();
+                LogUtils.i(TAG, "获取包名失败");
+                return;
+            }
+            //4.创建皮肤资源类
             resources = skinResource.getResources(path);
+            //5.设置需要换肤标识
+            isNeedSkin = true;
         }
-
-
     }
 
 
@@ -154,6 +158,9 @@ public class SkinManager {
             LogUtils.i(TAG, "获取包名失败");
             return;
         }
+
+        // 校验签名  增量更新再说
+
         //2.标志当前app需要换肤
         isNeedSkin = true;
         //3.进行换肤

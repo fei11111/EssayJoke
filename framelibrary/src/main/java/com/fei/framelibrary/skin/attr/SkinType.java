@@ -1,5 +1,6 @@
 package com.fei.framelibrary.skin.attr;
 
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -26,8 +27,8 @@ public enum SkinType {
             int identifier = getId(resources, resName, resType, packageName);
             if (identifier > 0) {
                 if (resType.equalsIgnoreCase("color")) {
-                    int color = resources.getColor(identifier);
-                    view.setBackgroundColor(color);
+                    ColorStateList colorStateList = resources.getColorStateList(identifier);
+                    view.setBackgroundColor(colorStateList.getDefaultColor());
                 } else if (resType.equalsIgnoreCase("drawable")) {
                     Drawable drawable = resources.getDrawable(identifier);
                     view.setBackgroundDrawable(drawable);
@@ -43,8 +44,8 @@ public enum SkinType {
             int identifier = getId(resources, resName, resType, packageName);
             if (identifier > 0) {
                 if (view instanceof TextView) {
-                    int color = resources.getColor(identifier);
-                    ((TextView) view).setTextColor(color);
+                    ColorStateList colorStateList = resources.getColorStateList(identifier);
+                    ((TextView) view).setTextColor(colorStateList);
                 }
 
             }
