@@ -3,6 +3,7 @@ package com.fei.framelibrary.base;
 import com.fei.baselibrary.base.BaseApplication;
 import com.fei.baselibrary.http.IHttpEngine;
 import com.fei.framelibrary.http.OkHttpEngine;
+import com.fei.framelibrary.skin.SkinManager;
 
 /**
  * @ClassName: BaseSkinApplication
@@ -21,6 +22,12 @@ public class BaseSkinApplication extends BaseApplication {
         super.onCreate();
         //初始化请求方式
         initHttp();
+        //初始化皮肤
+        initSkin();
+    }
+
+    private void initSkin() {
+        SkinManager.getInstance().init(this);
     }
 
     /**

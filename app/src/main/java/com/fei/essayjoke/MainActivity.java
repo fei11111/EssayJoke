@@ -161,12 +161,12 @@ public class MainActivity extends BaseSkinActivity {
         String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator +"skin.skin";
 //        // 换肤
-        SkinManager.getInstance(this).load(SkinPath);
+        SkinManager.getInstance().load(SkinPath);
     }
 
     public void skin1(View view) {
         // 恢复默认
-        SkinManager.getInstance(this).restore();
+        SkinManager.getInstance().restore();
     }
 
 

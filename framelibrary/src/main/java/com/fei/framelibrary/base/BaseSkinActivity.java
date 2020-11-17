@@ -70,7 +70,7 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
             if (array.size() > 0) {
                 SkinView skinView = new SkinView(view, array);
                 //4.存放入SkinManager管理，并判断是否需要换肤
-                SkinManager.getInstance(this).register(this, skinView);
+                SkinManager.getInstance().register(this, skinView);
             }
         }
         return view;
@@ -137,7 +137,7 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
 
     @Override
     protected void onDestroy() {
-        SkinManager.getInstance(this).unregister(this);
+        SkinManager.getInstance().unregister(this);
         super.onDestroy();
     }
 

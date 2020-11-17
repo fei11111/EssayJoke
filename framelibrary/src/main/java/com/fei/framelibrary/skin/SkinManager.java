@@ -44,11 +44,11 @@ public class SkinManager {
     //资源获取类
     private SkinResource skinResource;
 
-    public static SkinManager getInstance(Context mContext) {
+    public static SkinManager getInstance() {
         if (instance == null) {
             synchronized (SkinManager.class) {
                 if (instance == null) {
-                    instance = new SkinManager(mContext);
+                    instance = new SkinManager();
                 }
             }
         }
@@ -58,7 +58,7 @@ public class SkinManager {
     /**
      * 初始化
      */
-    public SkinManager(Context mContext) {
+    public void init(Context mContext) {
         context = mContext.getApplicationContext();
 
         //1.从sp获取换肤文件路径
