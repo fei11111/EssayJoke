@@ -1,7 +1,7 @@
 package com.fei.framelibrary.base;
 
 import com.fei.baselibrary.base.BaseApplication;
-import com.fei.baselibrary.http.HttpUtil;
+import com.fei.baselibrary.http.IHttpEngine;
 import com.fei.framelibrary.http.OkHttpEngine;
 
 /**
@@ -27,7 +27,7 @@ public class BaseSkinApplication extends BaseApplication {
      * 初始化请求
      */
     @Override
-    public void initHttp() {
-        HttpUtil.init(new OkHttpEngine());
+    public IHttpEngine initHttp() {
+        return new OkHttpEngine();
     }
 }
