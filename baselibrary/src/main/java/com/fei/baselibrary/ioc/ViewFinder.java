@@ -15,8 +15,8 @@ import android.view.View;
  */
 public class ViewFinder {
 
-    private static Activity mActivity;
-    private static View mView;
+    private Activity mActivity;
+    private View mView;
 
     public ViewFinder(Activity mActivity) {
         this.mActivity = mActivity;
