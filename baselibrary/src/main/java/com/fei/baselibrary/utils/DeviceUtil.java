@@ -1,6 +1,7 @@
 package com.fei.baselibrary.utils;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -69,6 +70,22 @@ public class DeviceUtil {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 根据apk路径获取包名
+     */
+
+    public static String getApkPackageName(Context context, String apkPath) {
+        PackageManager pm = context.getPackageManager();
+        PackageInfo info = pm.getPackageArchiveInfo(apkPath, PackageManager.GET_ACTIVITIES);
+        ApplicationInfo appInfo = null;
+        String packageName = "";
+        if (info != null) {
+            appInfo = info.applicationInfo;
+            packageName = appInfo.packageName;  //得到apk包名
+        }
+        return packageName;
     }
 
 }

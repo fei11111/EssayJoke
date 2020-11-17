@@ -4,6 +4,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
+        minSdkVersion 15
         compileSdkVersion 27
         buildToolsVersion '28.0.2'
         versionCode 1

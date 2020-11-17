@@ -1,4 +1,12 @@
-package com.fei.framelibrary.skin;
+package com.fei.framelibrary.skin.attr;
+
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * @ClassName: SkinResource
@@ -42,6 +50,36 @@ package com.fei.framelibrary.skin;
     * */
 public class SkinResource {
 
+    private Context context;
 
+    public SkinResource(Context mContext) {
+        context = mContext.getApplicationContext();
+    }
 
+    public Resources getResources(String path) {
+        try {
+            //资源管理器
+            AssetManager assetManager = AssetManager.class.newInstance();
+            //获取加载资源方法
+            Method addAssetPath = assetManager.getClass().getDeclaredMethod("addAssetPath", String.class);
+            if (!addAssetPath.isAccessible()) {
+                //如果不能访问，设置访问权限
+                addAssetPath.setAccessible(true);
+            }
+            //反射调用方法，添加资源路径
+            addAssetPath.invoke(assetManager, path);
+            Resources supResources = context.getResources();
+            //创建新皮肤的资源类
+            return new Resources(assetManager, supResources.getDisplayMetrics(), supResources.getConfiguration());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

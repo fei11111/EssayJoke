@@ -1,8 +1,8 @@
 package com.fei.framelibrary.skin.callback;
 
-import android.view.View;
+import android.content.res.Resources;
 
-import com.fei.framelibrary.skin.SkinAttr;
+import com.fei.framelibrary.skin.attr.SkinView;
 
 /**
  * @ClassName: SkinCallback
@@ -17,8 +17,9 @@ import com.fei.framelibrary.skin.SkinAttr;
 public interface SkinCallback {
 
     /**
-     * @param view 拦截的view
-     * @param attr 获取到的属性 ，包含资源名
-     * */
-    void callback(View view, SkinAttr attr, String packageName);
+     * @param skinView 拦截的view 包含view和skinArr，有属性名，资源名，资源类型，可以通过判断属性名更换皮肤
+     * @param packageName 皮肤的包名
+     * @param resources 皮肤资源类，利用该类进行皮肤替换
+     */
+    void callback(SkinView skinView, String packageName, Resources resources);
 }

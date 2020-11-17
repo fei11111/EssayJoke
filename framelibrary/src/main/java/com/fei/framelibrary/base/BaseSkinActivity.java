@@ -10,10 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.R;
+import androidx.core.view.LayoutInflaterCompat;
+
 import com.fei.baselibrary.base.BaseActivity;
-import com.fei.framelibrary.skin.SkinAttr;
 import com.fei.framelibrary.skin.SkinManager;
-import com.fei.framelibrary.skin.SkinView;
+import com.fei.framelibrary.skin.attr.SkinAttr;
+import com.fei.framelibrary.skin.attr.SkinView;
 import com.fei.framelibrary.skin.callback.SkinCallback;
 import com.fei.framelibrary.skin.support.SkinCompatViewInflater;
 
@@ -21,11 +26,6 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.R;
-import androidx.core.view.LayoutInflaterCompat;
 
 import static androidx.appcompat.widget.VectorEnabledTintResources.MAX_SDK_WHERE_REQUIRED;
 
@@ -99,20 +99,22 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
         List<SkinAttr> array = new ArrayList<>();
         if (view != null) {
             for (int i = 0; i < attrs.getAttributeCount(); i++) {
-                //1.获取属性名、属性值,属性值是@2123123
+                //1.获取属性名、属性值,属性值是android:src="@2123123"
+                //src为属性名，@2123123为属性值
+                attrs.getAttributeNameResource(i);
                 String attributeName = attrs.getAttributeName(i);
                 String attributeValue = attrs.getAttributeValue(i);
                 //2.必须是@开头的属性值才能换肤，根据属性值@2123123获取资源名getResourceEntryName，资源类型getResourceTypeName
                 if (attributeValue.startsWith("@")) {
                     //2.1获取所有@开头的属性
-                    array.add(createSkinAttr(attributeValue));
+                    array.add(createSkinAttr(attributeName, attributeValue));
                 }
             }
             //3.创建SkinView
             if (array.size() > 0) {
                 SkinView skinView = new SkinView(view, array);
-                //4.存放入SkinManager管理
-                SkinManager.getInstance().register(this, skinView);
+                //4.存放入SkinManager管理，并判断是否需要换肤
+                SkinManager.getInstance(this).register(this, skinView);
             }
         }
 
@@ -124,7 +126,7 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
      * 生成自定义属性
      * 必须是@开头的属性值才能换肤，根据属性值@2123123获取资源名getResourceEntryName，资源类型getResourceTypeName
      */
-    private SkinAttr createSkinAttr(String attributeValue) {
+    private SkinAttr createSkinAttr(String attributeName, String attributeValue) {
         //获取该app资源类
         Resources resources = getResources();
         //通过资源类获取资源名，去掉@符号
@@ -133,17 +135,17 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
         String resourceEntryName = resources.getResourceEntryName(index);
         //获取资源类型
         String resourceTypeName = resources.getResourceTypeName(index);
-        return new SkinAttr(resourceEntryName, resourceTypeName);
+        return new SkinAttr(attributeName, resourceEntryName, resourceTypeName);
     }
 
     @Override
     protected void onDestroy() {
-        SkinManager.getInstance().unregister(this);
+        SkinManager.getInstance(this).unregister(this);
         super.onDestroy();
     }
 
     @Override
-    public void callback(View view, SkinAttr attr, String packageName) {
-
+    public void callback(SkinView skinView, String packageName, Resources resources) {
+        //自定义
     }
 }

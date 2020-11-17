@@ -1,11 +1,15 @@
 package com.fei.essayjoke;
 
 import android.content.Intent;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
+import com.fei.framelibrary.skin.SkinManager;
+
+import java.io.File;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -153,16 +157,16 @@ public class MainActivity extends BaseSkinActivity {
 
     public void skin(View view) {
         // 从服务器上下载
-//
-//        String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-//                +File.separator +"red.skin";
+
+        String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator +"skin.skin";
 //        // 换肤
-//        int result = SkinManager.getInstance().loadSkin(SkinPath);
+        SkinManager.getInstance(this).load(SkinPath);
     }
 
     public void skin1(View view) {
         // 恢复默认
-//        int result = SkinManager.getInstance().restoreDefault();
+        SkinManager.getInstance(this).restore();
     }
 
 

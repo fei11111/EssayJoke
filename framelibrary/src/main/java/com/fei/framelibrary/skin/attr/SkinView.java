@@ -1,5 +1,6 @@
-package com.fei.framelibrary.skin;
+package com.fei.framelibrary.skin.attr;
 
+import android.content.res.Resources;
 import android.view.View;
 
 import java.util.List;
@@ -25,9 +26,9 @@ public class SkinView {
         this.attrs = attrs;
     }
 
-    public void skin(SkinType skinType, String packageName) {
+    public void skin(Resources resources, String packageName) {
         for (SkinAttr attr : attrs) {
-            attr.skin(view, skinType, packageName);
+            attr.skin(resources,view, packageName);
         }
     }
 }
