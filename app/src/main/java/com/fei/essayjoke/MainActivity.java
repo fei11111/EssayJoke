@@ -4,16 +4,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Environment;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
 import android.widget.Toast;
 
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
-import com.fei.framelibrary.skin.SkinManager;
-
-import java.io.File;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -123,15 +120,19 @@ public class MainActivity extends BaseSkinActivity {
 //            }
 //        });
         startService(new Intent(this, UserServie.class));
-        bindService(new Intent(this, UserServie.class),
+        Intent intent = new Intent();
+        intent.setAction("com.fei.user");
+        intent.setPackage("com.fei.essayjoke");
+        bindService(intent,
                 conn, Context.BIND_AUTO_CREATE);
 
     }
 
+    private UserAidl userAidl;
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
+            userAidl = UserAidl.Stub.asInterface(service);
         }
 
         @Override
@@ -174,25 +175,26 @@ public class MainActivity extends BaseSkinActivity {
         return R.layout.activity_main;
     }
 
-    public void skin(View view) {
-        // 从服务器上下载
-
-        String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + "skin.skin";
-//        // 换肤
-        SkinManager.getInstance().load(SkinPath);
+    public void skin(View view) throws RemoteException {
+//        // 从服务器上下载
+//
+//        String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
+//                + File.separator + "skin.skin";
+////        // 换肤
+//        SkinManager.getInstance().load(SkinPath);
+        Toast.makeText(this, userAidl.getPassword(), Toast.LENGTH_SHORT).show();
     }
 
     public void skin1(View view) {
         // 恢复默认
-        SkinManager.getInstance().restore();
+//        SkinManager.getInstance().restore();
     }
 
 
     public void skin2(View view) {
-        // 跳转
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        // 跳转
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
 
 
