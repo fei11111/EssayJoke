@@ -1,7 +1,11 @@
 package com.fei.essayjoke;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Environment;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.Toast;
 
@@ -118,8 +122,23 @@ public class MainActivity extends BaseSkinActivity {
 //
 //            }
 //        });
+        startService(new Intent(this, UserServie.class));
+        bindService(new Intent(this, UserServie.class),
+                conn, Context.BIND_AUTO_CREATE);
 
     }
+
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     protected void initView() {
@@ -159,7 +178,7 @@ public class MainActivity extends BaseSkinActivity {
         // 从服务器上下载
 
         String SkinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator +"skin.skin";
+                + File.separator + "skin.skin";
 //        // 换肤
         SkinManager.getInstance().load(SkinPath);
     }
