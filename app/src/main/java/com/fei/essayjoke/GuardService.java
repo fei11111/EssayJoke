@@ -8,10 +8,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
-import com.fei.baselibrary.utils.LogUtils;
-
 /**
  * @ClassName: GuardService
  * @Description: 描述
@@ -29,7 +25,7 @@ public class GuardService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground(guardService, new Notification());
-        bindService(new Intent(GuardService.this,MessageService.class),conn, Context.BIND_IMPORTANT);
+        bindService(new Intent(GuardService.this, MessageService.class), conn, Context.BIND_IMPORTANT);
         return START_STICKY;
     }
 
@@ -40,14 +36,14 @@ public class GuardService extends Service {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            startService(new Intent(GuardService.this,MessageService.class));
-            bindService(new Intent(GuardService.this,MessageService.class),conn, Context.BIND_IMPORTANT);
+            startService(new Intent(GuardService.this, MessageService.class));
+            bindService(new Intent(GuardService.this, MessageService.class), conn, Context.BIND_IMPORTANT);
         }
     };
 
     @Override
     public IBinder onBind(Intent intent) {
-        return new ServiceConnect.Stub() {
+        return new ProcessAidl.Stub() {
         };
     }
 }

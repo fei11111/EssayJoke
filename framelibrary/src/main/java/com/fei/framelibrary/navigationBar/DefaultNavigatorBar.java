@@ -99,6 +99,14 @@ public class DefaultNavigatorBar extends AbsNavigationBar {
     }
 
     /**
+     * 隐藏左边
+     * */
+    public void hideLeft(){
+        setIcon(R.id.fl_head_left,GONE);
+        setOnLeftListener(null);
+    }
+
+    /**
      * 设置右侧Icon
      */
     public void setIconSecond(@DrawableRes int drawableId) {
@@ -202,6 +210,15 @@ public class DefaultNavigatorBar extends AbsNavigationBar {
             setVisibility(R.id.tv_head_left, GONE);
             setVisibility(R.id.iv_head_left, VISIBLE);
             setIcon(R.id.iv_head_left, drawableId);
+            return this;
+        }
+
+        /**
+         * 隐藏左边
+         * */
+        public Builder hideLeft(){
+            setVisibility(R.id.fl_head_left,GONE);
+            setOnLeftListener(null);
             return this;
         }
 

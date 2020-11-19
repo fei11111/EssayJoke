@@ -12,6 +12,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.fei.baselibrary.utils.LogUtils;
+
 import java.util.List;
 
 /**
@@ -28,19 +30,25 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class JobWakeUpService extends JobService {
 
+    private static final String TAG = "JobWakeUpService";
     private final int JobWakeUpServiceId = 1;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtils.i(TAG, "onCreate");
+        createHeartBeat();
+    }
+
+    private void createHeartBeat() {
         JobInfo.Builder builder = new JobInfo.Builder(JobWakeUpServiceId, new ComponentName(this, JobWakeUpService.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //7.0后执行周期时间会只有大于等于15分钟才执行，只有设置最小延迟时间才能避免
-            builder.setMinimumLatency(2000);//执行的最小延迟时间
-            builder.setOverrideDeadline(2000); //执行的最长延时时间
-            builder.setBackoffCriteria(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS, JobInfo.BACKOFF_POLICY_LINEAR);//线性重试方案
+            builder.setMinimumLatency(10000);//执行的最小延迟时间
+            builder.setOverrideDeadline(10000); //执行的最长延时时间
+            builder.setBackoffCriteria(2000, JobInfo.BACKOFF_POLICY_LINEAR);//线性重试方案
         } else {
-            builder.setPeriodic(2000);//设置执行周期
+            builder.setPeriodic(10000);//设置执行周期
         }
         builder.setPersisted(false);//设备重启以后是否重新执行任务
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);//设置任何网络环境下都可以执行
@@ -48,26 +56,37 @@ public class JobWakeUpService extends JobService {
         builder.setRequiresDeviceIdle(false);//设置手机系统处于空闲状态下执行
         JobInfo jobInfo = builder.build();
         JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        scheduler.schedule(jobInfo);
+        if (scheduler.schedule(jobInfo) < 0) {
+            LogUtils.i(TAG, "失败");
+        } else {
+            LogUtils.i(TAG, "成功");
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        LogUtils.i(TAG, "onStartCommand");
+
         return START_STICKY;
     }
 
     @Override
     public boolean onStartJob(JobParameters params) {
         // 判断服务有没有在运行
+        LogUtils.i(TAG, "onStartJob");
         boolean messageServiceAlive = serviceAlive(MessageService.class.getName());
         if (!messageServiceAlive) {
             startService(new Intent(this, MessageService.class));
         }
-        return false;
+        createHeartBeat();
+        jobFinished(params, false);
+        return true;
+
     }
 
     @Override
     public boolean onStopJob(JobParameters params) {
+        LogUtils.i(TAG, "onStopJob");
         return false;
     }
 

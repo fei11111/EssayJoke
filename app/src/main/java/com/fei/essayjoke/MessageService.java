@@ -1,11 +1,7 @@
 package com.fei.essayjoke;
 
-import android.app.Notification;
 import android.app.Service;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import com.fei.baselibrary.utils.LogUtils;
@@ -47,28 +43,28 @@ public class MessageService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startForeground(messageServiceId, new Notification());
-        startService(new Intent(this, GuardService.class));
-        bindService(new Intent(this, GuardService.class), conn, Context.BIND_IMPORTANT);
+//        startForeground(messageServiceId, new Notification());
+//        startService(new Intent(this, GuardService.class));
+//        bindService(new Intent(this, GuardService.class), conn, Context.BIND_IMPORTANT);
         return START_STICKY;
     }
 
-    private ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            LogUtils.i(TAG, "绑定成功");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            startService(new Intent(MessageService.this, GuardService.class));
-            bindService(new Intent(MessageService.this, GuardService.class), conn, Context.BIND_IMPORTANT);
-        }
-    };
+//    private ServiceConnection conn = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            LogUtils.i(TAG, "绑定成功");
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//            startService(new Intent(MessageService.this, GuardService.class));
+//            bindService(new Intent(MessageService.this, GuardService.class), conn, Context.BIND_IMPORTANT);
+//        }
+//    };
 
     @Override
     public IBinder onBind(Intent intent) {
-        return new ServiceConnect.Stub() {
+        return new ProcessAidl.Stub() {
         };
     }
 }
