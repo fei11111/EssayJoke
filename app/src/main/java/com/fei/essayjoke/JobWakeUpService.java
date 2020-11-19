@@ -1,6 +1,7 @@
 package com.fei.essayjoke;
 
 import android.app.ActivityManager;
+import android.app.Notification;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
@@ -44,11 +45,11 @@ public class JobWakeUpService extends JobService {
         JobInfo.Builder builder = new JobInfo.Builder(JobWakeUpServiceId, new ComponentName(this, JobWakeUpService.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //7.0后执行周期时间会只有大于等于15分钟才执行，只有设置最小延迟时间才能避免
-            builder.setMinimumLatency(10000);//执行的最小延迟时间
-            builder.setOverrideDeadline(10000); //执行的最长延时时间
-            builder.setBackoffCriteria(2000, JobInfo.BACKOFF_POLICY_LINEAR);//线性重试方案
+            builder.setMinimumLatency(1000);//执行的最小延迟时间
+            builder.setOverrideDeadline(1000); //执行的最长延时时间
+            builder.setBackoffCriteria(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS, JobInfo.BACKOFF_POLICY_LINEAR);//线性重试方案
         } else {
-            builder.setPeriodic(10000);//设置执行周期
+            builder.setPeriodic(1000);//设置执行周期
         }
         builder.setPersisted(false);//设备重启以后是否重新执行任务
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);//设置任何网络环境下都可以执行
@@ -66,7 +67,6 @@ public class JobWakeUpService extends JobService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.i(TAG, "onStartCommand");
-
         return START_STICKY;
     }
 

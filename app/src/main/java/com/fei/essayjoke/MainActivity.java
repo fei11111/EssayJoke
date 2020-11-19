@@ -1,6 +1,7 @@
 package com.fei.essayjoke;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
 import android.os.RemoteException;
 import android.view.View;
@@ -120,7 +121,9 @@ public class MainActivity extends BaseSkinActivity {
 //            }
 //        });
         startService(new Intent(this, MessageService.class));
-        startService(new Intent(this,JobWakeUpService.class));
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            startService(new Intent(this, JobWakeUpService.class));
+        }
 
     }
 
