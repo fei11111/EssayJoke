@@ -119,27 +119,11 @@ public class MainActivity extends BaseSkinActivity {
 //
 //            }
 //        });
-        startService(new Intent(this, UserServie.class));
-        Intent intent = new Intent();
-        intent.setAction("com.fei.user");
-        intent.setPackage("com.fei.essayjoke");
-        bindService(intent,
-                conn, Context.BIND_AUTO_CREATE);
+            startService(new Intent(this,MessageService.class));
+
 
     }
 
-    private UserAidl userAidl;
-    private ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            userAidl = UserAidl.Stub.asInterface(service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
 
     @Override
     protected void initView() {
@@ -182,7 +166,7 @@ public class MainActivity extends BaseSkinActivity {
 //                + File.separator + "skin.skin";
 ////        // 换肤
 //        SkinManager.getInstance().load(SkinPath);
-        Toast.makeText(this, userAidl.getPassword(), Toast.LENGTH_SHORT).show();
+
     }
 
     public void skin1(View view) {
