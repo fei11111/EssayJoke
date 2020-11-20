@@ -1,5 +1,6 @@
 package com.fei.essayjoke;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
@@ -7,6 +8,12 @@ import android.os.RemoteException;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.fei.baselibrary.permission.PermissionFail;
+import com.fei.baselibrary.permission.PermissionSuccess;
+import com.fei.baselibrary.utils.LogUtils;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 import com.fei.framelibrary.skin.SkinManager;
@@ -124,9 +131,8 @@ public class MainActivity extends BaseSkinActivity {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             startService(new Intent(this, JobWakeUpService.class));
         }
-
+        callPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
     }
-
 
     @Override
     protected void initView() {

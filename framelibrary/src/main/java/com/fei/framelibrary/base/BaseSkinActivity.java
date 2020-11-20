@@ -145,4 +145,14 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
     public void callback(SkinView skinView, String packageName, Resources resources) {
         //自定义
     }
+
+    @Override
+    public void onPermissionSuccess(int requestCode) {
+
+    }
+
+    @Override
+    public void onPermissionFail(int requestCode) {
+
+    }
 }
