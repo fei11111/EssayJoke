@@ -90,4 +90,7 @@
     <dimen name="load_more_footer_height_classic">60dp</dimen>
     <dimen name="refresh_header_height_classic">80dp</dimen>
 
+    <!--selectImage-->
+    <dimen name="title_bar_height">44.0dip</dimen>
+
 </resources>

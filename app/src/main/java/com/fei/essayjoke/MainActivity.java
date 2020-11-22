@@ -6,14 +6,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.RemoteException;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.fei.baselibrary.permission.PermissionFail;
-import com.fei.baselibrary.permission.PermissionSuccess;
-import com.fei.baselibrary.utils.LogUtils;
+import com.fei.baselibrary.ioc.ViewById;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 import com.fei.framelibrary.skin.SkinManager;
@@ -23,6 +19,9 @@ import java.io.File;
 public class MainActivity extends BaseSkinActivity {
 
     private static final String TAG = "MainActivity";
+
+    @ViewById(R.id.iv_text)
+    ImageView ivText;
 
     @Override
     protected void initData() {
