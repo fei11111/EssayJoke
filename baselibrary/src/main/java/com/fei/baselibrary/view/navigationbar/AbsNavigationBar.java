@@ -2,17 +2,19 @@ package com.fei.baselibrary.view.navigationbar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fei.baselibrary.ioc.Visibility;
-import com.fei.baselibrary.utils.LogUtils;
-import com.fei.baselibrary.view.ViewHelper;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+
+import com.fei.baselibrary.ioc.Visibility;
+import com.fei.baselibrary.utils.StatusBarUtil;
+import com.fei.baselibrary.view.ViewHelper;
 
 /**
  * @ClassName: AbsNavigationBar 抽象类 链式+builder
@@ -156,19 +158,25 @@ public abstract class AbsNavigationBar implements INavigationBar {
             T navigationBar = createNavigationBar(P);
             P.layoutRes = navigationBar.getLayoutRes();
             //1.获取布局文件
+            View contentView = P.mViewHelper.setContentView(P.mContext, P.layoutRes, P.mViewGroup);
+            if (contentView == null) {
+                //如果布局文件为空，说明头部布局没有实现
+                throw new IllegalArgumentException("please make sure getLayoutRes has value");
+            }
             //1.1判断父类是否为空
             if (P.mViewGroup == null && P.mContext instanceof Activity) {
                 ViewGroup activityRoot = (ViewGroup) ((Activity) (P.mContext))
                         .getWindow().getDecorView();
                 P.mViewGroup = (ViewGroup) activityRoot.getChildAt(0);
+                Drawable background = contentView.getBackground();
+                if (background instanceof ColorDrawable) {
+                    //沉浸式
+                    int color = ((ColorDrawable) background).getColor();
+                    StatusBarUtil.statusBarTintColor((Activity) P.mContext, color);
+                }
             }
             if (P.mViewGroup == null) {
                 throw new IllegalArgumentException("can not find viewGroup,please init viewGroup for navigationBar");
-            }
-            View contentView = P.mViewHelper.setContentView(P.mContext, P.layoutRes, P.mViewGroup);
-            if (contentView == null) {
-                //如果布局文件为空，说明头部布局没有实现
-                throw new IllegalArgumentException("please make sure getLayoutRes has value");
             }
             //2.添加入父类布局
             P.mViewGroup.addView(contentView, 0);

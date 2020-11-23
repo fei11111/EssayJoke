@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fei.baselibrary.ioc.ViewById;
+import com.fei.essayjoke.imageselector.ImageSelectorActivity;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 import com.fei.framelibrary.skin.SkinManager;
@@ -185,7 +186,10 @@ public class MainActivity extends BaseSkinActivity {
 
     public void skin2(View view) {
         // 跳转
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ImageSelectorActivity.class);
+        intent.putExtra(ImageSelectorActivity.EXTRA_SHOW_CAMERA,true);
+        intent.putExtra(ImageSelectorActivity.EXTRA_MULTI,true);
+        intent.putExtra(ImageSelectorActivity.EXTRA_MAX_COUNT,10);
         startActivity(intent);
     }
 
