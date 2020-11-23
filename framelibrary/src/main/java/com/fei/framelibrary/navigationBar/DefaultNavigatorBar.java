@@ -6,11 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.fei.baselibrary.view.navigationbar.AbsNavigationBar;
-import com.fei.framelibrary.R;
-
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+
+import com.fei.baselibrary.view.navigationbar.AbsNavigationBar;
+import com.fei.framelibrary.R;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -34,6 +35,13 @@ public class DefaultNavigatorBar extends AbsNavigationBar {
     @Override
     public int getLayoutRes() {
         return R.layout.app_head_view;
+    }
+
+    /**
+     * 设置背景颜色
+     * */
+    public void setBackgroundColor(@ColorRes int color) {
+        setBackgroundColor(color);
     }
 
     /**
@@ -105,6 +113,7 @@ public class DefaultNavigatorBar extends AbsNavigationBar {
         setIcon(R.id.fl_head_left,GONE);
         setOnLeftListener(null);
     }
+
 
     /**
      * 设置右侧Icon
@@ -262,6 +271,14 @@ public class DefaultNavigatorBar extends AbsNavigationBar {
             setVisibility(R.id.iv_head_right_one, GONE);
             setVisibility(R.id.iv_head_right_two, VISIBLE);
             setIcon(R.id.iv_head_right_two, drawableId);
+            return this;
+        }
+
+        /**
+         * 设置背景颜色
+         * */
+        public Builder setBackgroundColor(@ColorRes int color) {
+            P.backgroundColor = color;
             return this;
         }
 

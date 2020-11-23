@@ -8,14 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fei.baselibrary.ioc.Visibility;
-
-import java.lang.ref.WeakReference;
-
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+
+import com.fei.baselibrary.ioc.Visibility;
+
+import java.lang.ref.WeakReference;
 
 /**
  * @ClassName: 辅助类，初始化布局控件和点击事件
@@ -114,6 +115,13 @@ public class ViewHelper {
         ImageView imageView = getView(viewId);
         if (imageView != null) {
             imageView.setImageResource(drawableId);
+        }
+    }
+
+    public void setBackgroundColor(@IdRes int viewId, @ColorRes int color) {
+        View view = getView(viewId);
+        if (view != null) {
+            view.setBackgroundColor(color);
         }
     }
 }

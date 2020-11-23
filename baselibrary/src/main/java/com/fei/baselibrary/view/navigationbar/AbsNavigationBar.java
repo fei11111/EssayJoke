@@ -8,6 +8,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -130,6 +131,14 @@ public abstract class AbsNavigationBar implements INavigationBar {
         }
 
         /**
+         * 设置背景颜色
+         */
+        protected Builder setBackgroundColor(@ColorRes int color) {
+            P.backgroundColor = color;
+            return this;
+        }
+
+        /**
          * 设置控件是否可见
          */
         protected Builder setVisibility(@IdRes int viewId, @Visibility int visibility) {
@@ -162,6 +171,10 @@ public abstract class AbsNavigationBar implements INavigationBar {
             if (contentView == null) {
                 //如果布局文件为空，说明头部布局没有实现
                 throw new IllegalArgumentException("please make sure getLayoutRes has value");
+            }
+            //设置背景颜色
+            if (P.backgroundColor != -1) {
+                contentView.setBackgroundColor(P.backgroundColor);
             }
             //1.1判断父类是否为空
             if (P.mViewGroup == null && P.mContext instanceof Activity) {
@@ -220,6 +233,7 @@ public abstract class AbsNavigationBar implements INavigationBar {
             public ViewGroup mViewGroup;//父类布局
             public final ViewHelper mViewHelper;//辅助类
             public int layoutRes;//头部布局
+            public int backgroundColor;//背景颜色
 
             public NavigationParam(Context mContext, ViewGroup mViewGroup) {
                 this.mContext = mContext;
