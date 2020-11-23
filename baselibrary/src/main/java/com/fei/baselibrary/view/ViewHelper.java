@@ -1,6 +1,7 @@
 package com.fei.baselibrary.view;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,10 +119,11 @@ public class ViewHelper {
         }
     }
 
-    public void setBackgroundColor(@IdRes int viewId, @ColorRes int color) {
+    public void setColor(@IdRes int viewId, @ColorRes int color) {
         View view = getView(viewId);
         if (view != null) {
-            view.setBackgroundColor(color);
+            ColorStateList colorStateList = view.getContext().getResources().getColorStateList(color);
+            view.setBackgroundColor(colorStateList.getDefaultColor());
         }
     }
 }
