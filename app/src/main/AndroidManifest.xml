@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TestActivity" />
+        <activity android:name=".ProxyActivity"/>
         <activity android:name=".imageselector.ImageSelectorActivity"/>
         <service android:name=".GuardService"
             android:process=":guard"/>

@@ -2,7 +2,9 @@ package com.fei.essayjoke;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,6 +14,27 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+        Human human = new Human();
+        Object proxyInstance = Proxy.newProxyInstance(Human.class.getClassLoader(),
+                Human.class.getInterfaces(), new HumanInvocationHandler(human));
+        ((IBank)proxyInstance).apply("123");
+    }
+
+    private static class HumanInvocationHandler implements InvocationHandler {
+
+
+        private final Human human;
+
+        public HumanInvocationHandler(Human human) {
+            this.human = human;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            System.out.println("处理一些事情");
+            Object invoke = method.invoke(human, args);
+            System.out.println("完毕");
+            return invoke;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.fei.essayjoke;
 
 import com.fei.framelibrary.base.BaseSkinApplication;
+import com.fei.framelibrary.hook.HookStartActivityUtil;
 
 /**
  * @ClassName: BaseApplication
@@ -14,6 +15,13 @@ import com.fei.framelibrary.base.BaseSkinApplication;
  */
 public class EssayApplication extends BaseSkinApplication {
 
-
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        try {
+            HookStartActivityUtil.hook(this,ProxyActivity.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

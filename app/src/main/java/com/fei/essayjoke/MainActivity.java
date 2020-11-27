@@ -1,28 +1,25 @@
 package com.fei.essayjoke;
 
-import android.Manifest;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Environment;
 import android.os.RemoteException;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.fei.baselibrary.ioc.ViewById;
-import com.fei.essayjoke.imageselector.ImageSelectorActivity;
+import com.fei.baselibrary.utils.LogUtils;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 import com.fei.framelibrary.skin.SkinManager;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 public class MainActivity extends BaseSkinActivity {
 
     private static final String TAG = "MainActivity";
 
-    @ViewById(R.id.iv_text)
-    ImageView ivText;
 
     @Override
     protected void initData() {
@@ -127,11 +124,12 @@ public class MainActivity extends BaseSkinActivity {
 //
 //            }
 //        });
-        startService(new Intent(this, MessageService.class));
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            startService(new Intent(this, JobWakeUpService.class));
-        }
-        callPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//        startService(new Intent(this, MessageService.class));
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+//            startService(new Intent(this, JobWakeUpService.class));
+//        }
+//        callPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
     }
 
     @Override
@@ -186,11 +184,14 @@ public class MainActivity extends BaseSkinActivity {
 
     public void skin2(View view) {
         // 跳转
-        Intent intent = new Intent(this, ImageSelectorActivity.class);
-        intent.putExtra(ImageSelectorActivity.EXTRA_SHOW_CAMERA,true);
-        intent.putExtra(ImageSelectorActivity.EXTRA_MULTI,true);
-        intent.putExtra(ImageSelectorActivity.EXTRA_MAX_COUNT,10);
+//        Intent intent = new Intent(this, ImageSelectorActivity.class);
+//        intent.putExtra(ImageSelectorActivity.EXTRA_SHOW_CAMERA,true);
+//        intent.putExtra(ImageSelectorActivity.EXTRA_MULTI,true);
+//        intent.putExtra(ImageSelectorActivity.EXTRA_MAX_COUNT,10);
+//        startActivity(intent);
+        Intent intent = new Intent(this, TestActivity.class);
         startActivity(intent);
+
     }
 
 

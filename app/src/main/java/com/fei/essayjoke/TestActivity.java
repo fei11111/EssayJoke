@@ -1,12 +1,7 @@
 package com.fei.essayjoke;
 
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.fei.baselibrary.ioc.ViewById;
 import com.fei.framelibrary.base.BaseSkinActivity;
+import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 
 /**
  * @ClassName: TestActivity
@@ -20,11 +15,6 @@ import com.fei.framelibrary.base.BaseSkinActivity;
  */
 public class TestActivity extends BaseSkinActivity {
 
-    @ViewById(R.id.tv_text)
-    private TextView tvText;
-    @ViewById(R.id.iv_text)
-    private ImageView ivText;
-
     @Override
     protected void initData() {
 
@@ -32,17 +22,13 @@ public class TestActivity extends BaseSkinActivity {
 
     @Override
     protected void initView() {
-        ivText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(TestActivity.this,  1/0+"测试", Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
     @Override
     protected void initTile() {
-
+        DefaultNavigatorBar defaultNavigatorBar = new DefaultNavigatorBar.Builder(this)
+                .setTitle("Test").build();
     }
 
     @Override
