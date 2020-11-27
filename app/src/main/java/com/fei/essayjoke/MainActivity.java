@@ -1,20 +1,20 @@
 package com.fei.essayjoke;
 
-import android.content.Intent;
+import android.Manifest;
 import android.os.Environment;
 import android.os.RemoteException;
 import android.view.View;
+import android.webkit.PermissionRequest;
 import android.widget.Toast;
 
-import com.fei.baselibrary.utils.LogUtils;
+import com.fei.baselibrary.fix.FixManager;
+import com.fei.baselibrary.permission.PermissionUtil;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 import com.fei.framelibrary.skin.SkinManager;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import java.io.IOException;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -189,10 +189,37 @@ public class MainActivity extends BaseSkinActivity {
 //        intent.putExtra(ImageSelectorActivity.EXTRA_MULTI,true);
 //        intent.putExtra(ImageSelectorActivity.EXTRA_MAX_COUNT,10);
 //        startActivity(intent);
-        Intent intent = new Intent(this, TestActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, TestActivity.class);
+//        startActivity(intent);
+        PermissionUtil.with(this).permission(Manifest.permission.WRITE_EXTERNAL_STORAGE).code(1).request();
+
+
+//        Intent intent = new Intent();
+//        intent.setComponent(new ComponentName())
 
     }
 
-
+    @Override
+    public void onPermissionSuccess(int requestCode) {
+        super.onPermissionSuccess(requestCode);
+        if(requestCode==1) {
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + "Android协同平台.apk";
+            if(new File(path).exists()) {
+                try {
+                    FixManager fixManager = new FixManager(this);
+                    fixManager.addPatch(new File(path));
+                    Class<?> clazz = Class.forName("com.evergrande.cooperate.ui.MainActivity");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

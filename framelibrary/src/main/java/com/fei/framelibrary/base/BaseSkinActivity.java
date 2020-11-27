@@ -16,6 +16,8 @@ import androidx.appcompat.R;
 import androidx.core.view.LayoutInflaterCompat;
 
 import com.fei.baselibrary.base.BaseActivity;
+import com.fei.baselibrary.permission.PermissionFail;
+import com.fei.baselibrary.permission.PermissionSuccess;
 import com.fei.framelibrary.skin.SkinManager;
 import com.fei.framelibrary.skin.attr.SkinAttr;
 import com.fei.framelibrary.skin.attr.SkinView;
@@ -146,11 +148,13 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
         //自定义
     }
 
+    @PermissionSuccess
     @Override
     public void onPermissionSuccess(int requestCode) {
 
     }
 
+    @PermissionFail
     @Override
     public void onPermissionFail(int requestCode) {
 

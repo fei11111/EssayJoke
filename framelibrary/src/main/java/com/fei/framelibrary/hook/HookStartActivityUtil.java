@@ -224,18 +224,9 @@ public class HookStartActivityUtil {
                         for (int i = 0; i < objects.size(); ++i) {
                             Object item = objects.get(i);
                             Class<?> launchActivityItemClass = Class.forName("android.app.servertransaction.LaunchActivityItem");
-                            //如果item就是launchActivityItemClass
+                            //如果item就是launchActivityItem,还有很多其他Item，所以必须做判断
                             if (item.getClass() == launchActivityItemClass) {
-                                //获取item里的mIntent属性
-                                Field mIntentField = item.getClass().getDeclaredField("mIntent");
-                                mIntentField.setAccessible(true);
-                                //获取mIntent值
-                                Intent intent = (Intent) mIntentField.get(item);
-                                //替换为原来intent
-                                Intent originalIntent = intent.getParcelableExtra(EXTRA_ORIGINAL_INTENT);
-                                if (originalIntent != null) {
-                                    mIntentField.set(item, originalIntent);
-                                }
+                                changeIntent(item,"mIntent");
                             }
                         }
                     }
@@ -244,18 +235,8 @@ public class HookStartActivityUtil {
                     if (msg.what == 100) {
                         //LAUNCH_ACTIVITY
                         //ActivityClientRecord r = (ActivityClientRecord) msg.obj;
-                        Object object = msg.obj;
                         //获取ActivityClientRecord的属性intent
-                        Field intentField = object.getClass().getDeclaredField("intent");
-                        intentField.setAccessible(true);
-                        //获取mIntent值
-                        Intent intent = (Intent) intentField.get(object);
-                        //替换为原来intent
-                        Intent originalIntent = intent.getParcelableExtra(EXTRA_ORIGINAL_INTENT);
-                        if (originalIntent != null) {
-                            intentField.set(object, originalIntent);
-                        }
-
+                        changeIntent(msg.obj,"intent");
                     }
                 }
 
@@ -264,6 +245,22 @@ public class HookStartActivityUtil {
             }
 
             return false;
+        }
+    }
+
+    /**
+     * 更换会原来的Intent
+     * */
+    private static void changeIntent(Object item,String fieldName) throws Exception{
+        //获取item里的属性
+        Field mIntentField = item.getClass().getDeclaredField(fieldName);
+        mIntentField.setAccessible(true);
+        //获取对象值
+        Intent intent = (Intent) mIntentField.get(item);
+        //替换为原来intent
+        Intent originalIntent = intent.getParcelableExtra(EXTRA_ORIGINAL_INTENT);
+        if (originalIntent != null) {
+            mIntentField.set(item, originalIntent);
         }
     }
 }
