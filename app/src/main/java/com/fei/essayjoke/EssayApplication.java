@@ -18,10 +18,10 @@ public class EssayApplication extends BaseSkinApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        try {
-            HookStartActivityUtil.hook(this,ProxyActivity.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            HookStartActivityUtil.hook(this,ProxyActivity.class);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

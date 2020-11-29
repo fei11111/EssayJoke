@@ -78,8 +78,9 @@ public class FixManager {
             throw new FileNotFoundException(file.getAbsolutePath());
         }
         if (dest.exists()) {
-            Log.d(TAG, "dex [" + dest.getAbsolutePath() + "] has be loaded.");
-            return;
+//            Log.d(TAG, "dex [" + dest.getAbsolutePath() + "] has be loaded.");
+//            return;
+            dest.delete();
         }
         // copy to patch's directory
         FileUtil.copyFile(file, dest);
