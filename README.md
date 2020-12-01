@@ -36,4 +36,39 @@
 ####加载View拦截 LayoutInflaterCompat.setFactory2()
 
 ####[bindService流程->ContextImpl.bindServiceCommon->封装sd-AMS.bindIsolatedService->AS.bindServiceLocked  ->requestServiceBindingLocked->ApplicationThread..scheduleBindService绑定服务
-####->AMS.publishService->AS.publishServiceLocked      
+####->AMS.publishService->AS.publishServiceLocked
+
+
+####JNI笔记####
+
+1.写native方法
+    public static native void combine(String oldApkPath,
+                                      String newApkPath,
+                                      String patchPath);
+
+2.javah ­d jni -encoding utf-8 ­classpath D:\Workspace\NDKFirst\app\src\main\java com.brainbg.ndkfirst.NDKUtils
+3.上面命令会生成头文件，将头文件放入jni目录，jni目录跟src同级，然后实现.c
+4.1 添加 Android.mk文件(必加)
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+LOCAL_MODULE        := first-jni
+LOCAL_SRC_FILES     := first.c
+include $(BUILD_SHARED_LIBRARY)
+
+4.2 添加 Application.mk文件
+APP_PLATFORM := android-16
+APP_ABI :=all
+
+4.3 生产so文件
+cd D:\Workspace\NDKFirst\app
+
+ndk-build
+
+4.4 用Gradle链接c++项目
+jni目录中右击任意文件选择Link C++ project with Gradle
+
+5.拷贝bsdiff.c、bsdiff.h、bspatch.h、bspatch.c文件到jni目录，然后
+bspatch会加载bzip2，所以还要下载bzip2
+
+7.在gradle.properties下加android.useDeprecatedNdk=true
+
