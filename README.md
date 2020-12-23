@@ -38,6 +38,15 @@
 ####[bindService流程->ContextImpl.bindServiceCommon->封装sd-AMS.bindIsolatedService->AS.bindServiceLocked  ->requestServiceBindingLocked->ApplicationThread..scheduleBindService绑定服务
 ####->AMS.publishService->AS.publishServiceLocked
 
+####startActivity->startActivityForResult->mInstrumentation.execStartActivity->ActivityTaskManagerService.startActivity
+####->ActivityStarter.exec->ActivityStarter.startActivityUnChecked->mRootActivityContainer.resumeFocusedStacksTopActivities
+####->activityStack.resumeTopActivityUncheckedLocked->{startPausingLocked->PauseActivityItem->ActivityThread
+                                                      {mStackSupervisor.startSpecificActivityLocked->LaunchActivityItem->ActivityThread
+                                                      {transaction.setLifecycleStateRequest->ResumeActivityItem->ActivityThread                
+                                                      
+                                                       
+
+
 
 ####View
 
