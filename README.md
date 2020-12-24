@@ -42,7 +42,13 @@
 ####->ActivityStarter.exec->ActivityStarter.startActivityUnChecked->mRootActivityContainer.resumeFocusedStacksTopActivities
 ####->activityStack.resumeTopActivityUncheckedLocked->{startPausingLocked->PauseActivityItem->ActivityThread
                                                       {mStackSupervisor.startSpecificActivityLocked->LaunchActivityItem->ActivityThread
-                                                      {transaction.setLifecycleStateRequest->ResumeActivityItem->ActivityThread                
+                                                      ->mInstrumentation.callActivityOnCreate->Acitivity.onCreate->setContentView
+                                                      ->onFinishInflate
+                                                      {transaction.setLifecycleStateRequest->ResumeActivityItem->ActivityThread
+                                                      ->vm.addView->viewrootImpl.setView->performMeasure->measure->onMeasure
+                                                      ->performLayout->layout->onLayout
+                                                      ->performDraw->draw->onDraw
+                                                                   
                                                       
                                                        
 
@@ -64,4 +70,7 @@ baseLine = getHeight()/2 + dy;
 ##setWillNotDraw()
 
 4.draw用的是模板设计模式
+
+
+
 
