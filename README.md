@@ -2,7 +2,9 @@
 *内涵段子（封装库）
 
 ####AsyncTask执行过程
-#####ececute()方法一调用就会去判断状态，如果状态不对就会抛异常，然后会把状态置为Running ，  然后执行onPreExecute(), 开一个线程执行 doInBackground(),         doInBackground()执行完毕之后会利用Handler发送消息切换主线程中，然后执行onPostExecute()方法，最后把状态置为FINISHED。
+#####ececute()方法一调用就会去判断状态，如果状态不对就会抛异常，然后会把状态置为Running,
+然后执行onPreExecute(), 开一个线程执行 doInBackground(),
+doInBackground()执行完毕之后会利用Handler发送消息切换主线程中，然后执行onPostExecute()方法，最后把状态置为FINISHED。
 
 ####资源加载
  `try {
@@ -48,7 +50,7 @@
                                                       ->vm.addView->viewrootImpl.setView->performMeasure->measure->onMeasure
                                                       ->performLayout->layout->onLayout
                                                       ->performDraw->draw->onDraw
-                                                                   
+
                                                       
                                                        
 
@@ -71,6 +73,26 @@ baseLine = getHeight()/2 + dy;
 
 4.draw用的是模板设计模式
 
+5.invalidate会调用到ViewRootImpl,performDraw
+,之后回到View的draw,里面有dispatchView分发到所有子View
 
+6.自定义View套路
+ 6.1 自定义属性，获取自定义属性
+ 6.2 onMeasure测量自己宽高，如果继承TextView，Button不用自己测量
+ 6.3 onDraw 用于自己绘制
+ 6.4 onTouch 用于与用户交互
+
+7.自定义ViewGroup套路
+ 7.1 自定义属性，获取自定义属性（很少用）
+ 7.2 onMeasure，for循环测量子View，根据子View宽高来计算自己的宽高
+ 7.3 onDraw一般不需要，默认情况下不会调用，如果需要绘制需要实现dispatchDraw
+ 7.4 onLayout用于摆放子View，前提是不是GONE的情况
+ 7.5 在很多情况下不会继承自ViewGroup，往往是继承系统提供好的ViewGroup
+
+8.事件分发
+如果说子 View 没有一个地方返回 true ,只会进来一次只会响应 DOWN 事件,代表不需要消费该事件,如果你想响应 MOVE,UP 必须找个地方ture
+对于ViewGroup来讲，如果你想拦截子 View 的 Touch 事件，可以覆写 onInterceptTouchEvent 返回 true 即可 ,
+如果说 onInterceptTouchEvent 返回的是 true 会执行该 ViewGroup 的 onTouchEvent 方法 ,
+如果子 View 没有消费 touch 事件也会调用该 ViewGroup 的 onTouchEvent 方法
 
 
