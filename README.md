@@ -90,9 +90,10 @@ baseLine = getHeight()/2 + dy;
  7.5 在很多情况下不会继承自ViewGroup，往往是继承系统提供好的ViewGroup
 
 8.事件分发
-如果说子 View 没有一个地方返回 true ,只会进来一次只会响应 DOWN 事件,代表不需要消费该事件,如果你想响应 MOVE,UP 必须找个地方ture
-对于ViewGroup来讲，如果你想拦截子 View 的 Touch 事件，可以覆写 onInterceptTouchEvent 返回 true 即可 ,
-如果说 onInterceptTouchEvent 返回的是 true 会执行该 ViewGroup 的 onTouchEvent 方法 ,
+如果说子 View 没有一个地方返回 true ,只会进来一次只会响应 DOWN 事件,代表不需要消费该事件,
+如果你想响应 MOVE,UP 必须找个地方true,这样mFirstTouchTarget不为空，但是父类还是能在onInterceptTouchEvent、dispatchTouch拦截
+对于ViewGroup来讲，如果你想拦截子 View 的 Touch 事件，可以覆写 onInterceptTouchEvent 返回 true 即可,
+但是这样ViewGroup的onTouchEvent也会执行，如果要直接拦截不让ViewGroup自己的onTouchEvent执行，可以拦截dispatchTouch然后直接返回，不返回super
 如果子 View 没有消费 touch 事件也会调用该 ViewGroup 的 onTouchEvent 方法
 
 
