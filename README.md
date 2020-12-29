@@ -93,7 +93,8 @@ baseLine = getHeight()/2 + dy;
 如果说子 View 没有一个地方返回 true ,只会进来一次只会响应 DOWN 事件,代表不需要消费该事件,
 如果你想响应 MOVE,UP 必须找个地方true,这样mFirstTouchTarget不为空，但是父类还是能在onInterceptTouchEvent、dispatchTouch拦截
 对于ViewGroup来讲，如果你想拦截子 View 的 Touch 事件，可以覆写 onInterceptTouchEvent 返回 true 即可,
-但是这样ViewGroup的onTouchEvent也会执行，如果要直接拦截不让ViewGroup自己的onTouchEvent执行，可以拦截dispatchTouch然后直接返回，不返回super
+但是这样ViewGroup的onTouchEvent也会执行(MOVE的情况)，如果要直接拦截不让ViewGroup自己的onTouchEvent执行，可以拦截dispatchTouch然后直接返回，不返回super
+要在onInterceptTouchEvent拦截，必须保证mFirstTouchTarget不能为null，不然onInterceptTouchEvent也不会进来
 如果子 View 没有消费 touch 事件也会调用该 ViewGroup 的 onTouchEvent 方法
 
 
