@@ -98,3 +98,7 @@ baseLine = getHeight()/2 + dy;
 如果子 View 没有消费 touch 事件也会调用该 ViewGroup 的 onTouchEvent 方法
 
 
+平板 layout-sw600dp
+横屏 layout-land
+
+
