@@ -101,4 +101,9 @@ baseLine = getHeight()/2 + dy;
 平板 layout-sw600dp
 横屏 layout-land
 
+ldpi     120    240*320
+mdpi     160dp    320px*480px  1dp = 1px
+hdpi     240dp    480*800  1dp = 1.5px
+xhdpi    320    720*1280   1dp = 2px 
+
 
