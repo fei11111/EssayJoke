@@ -5,8 +5,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.fei.baselibrary.utils.LogUtils;
-
 import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -32,7 +30,7 @@ public class HttpUtil {
     public static final int GET = 0x002;
 
     //上下文
-    private static WeakReference<Context> mContext;
+    private Context mContext;
 
     //url
     private String mUrl;
@@ -44,29 +42,30 @@ public class HttpUtil {
     private static Map mParams;
 
     //网络请求
-    private static IHttpEngine httpEngine;
+    private static IHttpEngine mHttpEngine;
 
     //是否缓存
-    private boolean cache;
+    private boolean mCache;
 
-    private static HttpUtil instance;
+    private static HttpUtil mInstance;
 
     private HttpUtil(Context context) {
-        mContext = new WeakReference<>(context);
+        mContext = context;
     }
 
     /**
      * 创建httpUtil
      */
     public static HttpUtil with(Context context) {
-        if (instance == null) {
-            synchronized (HttpUtil.class) {
-                if (instance == null) {
-                    instance = new HttpUtil(context);
-                }
-            }
-        }
-        return instance;
+//        if (mInstance == null) {
+//            synchronized (HttpUtil.class) {
+//                if (mInstance == null) {
+//                    mInstance = new HttpUtil(context);
+//                }
+//            }
+//        }
+//        return mInstance;
+        return new HttpUtil(context);
     }
 
 
@@ -74,14 +73,14 @@ public class HttpUtil {
      * 在Application初始化
      */
     public static void init(IHttpEngine mHttpEngine) {
-        httpEngine = mHttpEngine;
+        HttpUtil.mHttpEngine = mHttpEngine;
     }
 
     /**
      * 改变网络请求框架
      */
     public HttpUtil exchange(IHttpEngine mHttpEngine) {
-        httpEngine = mHttpEngine;
+        HttpUtil.mHttpEngine = mHttpEngine;
         return this;
     }
 
@@ -126,7 +125,7 @@ public class HttpUtil {
     }
 
     public HttpUtil cache(boolean mCache) {
-        cache = mCache;
+        this.mCache = mCache;
         return this;
     }
 
@@ -142,7 +141,7 @@ public class HttpUtil {
      * 执行
      */
     public void execute(EngineCallBack callBack) {
-        if (httpEngine == null) {
+        if (mHttpEngine == null) {
             throw new IllegalArgumentException("未调用init方法，初始化");
         }
 
@@ -155,12 +154,12 @@ public class HttpUtil {
         }
 
         //可以添加业务逻辑代码
-        callBack.onPreExecute(mContext.get(), mParams);
+        callBack.onPreExecute(mContext, mParams);
 
         if (requestType == GET) {
-            httpEngine.get(cache, mContext.get(), mUrl, mParams, callBack);
+            mHttpEngine.get(mCache, mContext, mUrl, mParams, callBack);
         } else if (requestType == POST) {
-            httpEngine.post(cache, mContext.get(), mUrl, mParams, callBack);
+            mHttpEngine.post(mCache, mContext, mUrl, mParams, callBack);
         }
     }
 
