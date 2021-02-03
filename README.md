@@ -45,7 +45,7 @@ doInBackground()执行完毕之后会利用Handler发送消息切换主线程中
 ####->activityStack.resumeTopActivityUncheckedLocked->{startPausingLocked->PauseActivityItem->ActivityThread
                                                       {mStackSupervisor.startSpecificActivityLocked->LaunchActivityItem->ActivityThread
                                                       ->mInstrumentation.callActivityOnCreate->Acitivity.onCreate->setContentView
-                                                      ->onFinishInflate
+                                                      ->View.onFinishInflate
                                                       {transaction.setLifecycleStateRequest->ResumeActivityItem->ActivityThread
                                                       ->vm.addView->viewrootImpl.setView->performMeasure->measure->onMeasure
                                                       ->performLayout->layout->onLayout
@@ -111,7 +111,8 @@ xhdpi    320    720*1280   1dp = 2px
 2.开闭原则：对外可扩展，对内是关闭的
 3.里式替换原则：最主要的体现是继承和实现，一般跟开闭原则配套使用
 4.依赖倒置：高层只依赖抽象，不依赖细节，也就是不依赖实现
-5.接口隔离原则：
+5.接口隔离原则：一个接口里尽量少的方法，还有意思就是面向接口编程
+6.迪米特原则：一个对象应该对其它对象有最少的了解，也就是调用时不需要知道太多东西，就可以直接调用
 
 设计模式
 
