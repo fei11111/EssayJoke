@@ -34,7 +34,7 @@ public abstract class BaseApplication extends Application {
         //初始化热修复
         initHotFix();
         //初始化网络请求引擎
-        HttpUtil.init(initHttp());
+        HttpUtil.initHttpEngine(initHttp());
     }
 
     protected abstract IHttpEngine initHttp();
