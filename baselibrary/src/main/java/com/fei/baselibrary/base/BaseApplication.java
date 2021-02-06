@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.fei.baselibrary.crash.ExceptionCrashHandler;
 import com.fei.baselibrary.http.HttpUtil;
+import com.fei.baselibrary.http.ICacheEngine;
 import com.fei.baselibrary.http.IHttpEngine;
 
 /**
@@ -33,11 +34,14 @@ public abstract class BaseApplication extends Application {
         initCrash();
         //初始化热修复
         initHotFix();
-        //初始化网络请求引擎
-        HttpUtil.init(initHttp());
+        //初始化网络请求引擎、缓存引擎
+        HttpUtil.initHttpEngine(initHttpEngine());
+        HttpUtil.initCacheEngine(initHttpCacheEngine());
     }
 
-    protected abstract IHttpEngine initHttp();
+    protected abstract IHttpEngine initHttpEngine();
+
+    protected abstract ICacheEngine initHttpCacheEngine();
 
     //初始化热修复
     private void initHotFix() {

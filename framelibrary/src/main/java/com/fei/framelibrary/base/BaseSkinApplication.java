@@ -1,7 +1,9 @@
 package com.fei.framelibrary.base;
 
 import com.fei.baselibrary.base.BaseApplication;
+import com.fei.baselibrary.http.ICacheEngine;
 import com.fei.baselibrary.http.IHttpEngine;
+import com.fei.framelibrary.http.HttpDataBaseCache;
 import com.fei.framelibrary.http.OkHttpEngine;
 import com.fei.framelibrary.skin.SkinManager;
 
@@ -20,21 +22,22 @@ public class BaseSkinApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //初始化请求方式
-        initHttp();
         //初始化皮肤
         initSkin();
+    }
+
+    @Override
+    protected IHttpEngine initHttpEngine() {
+        return new OkHttpEngine();
+    }
+
+    @Override
+    protected ICacheEngine initHttpCacheEngine() {
+        return new HttpDataBaseCache();
     }
 
     private void initSkin() {
         SkinManager.getInstance().init(this);
     }
 
-    /**
-     * 初始化请求
-     */
-    @Override
-    public IHttpEngine initHttp() {
-        return new OkHttpEngine();
-    }
 }

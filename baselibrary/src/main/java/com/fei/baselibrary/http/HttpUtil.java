@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -28,6 +27,8 @@ public class HttpUtil {
     private static final String TAG = "HttpUtil";
     public static final int POST = 0x001;
     public static final int GET = 0x002;
+    //缓存引擎
+    private static ICacheEngine mCacheEngine;
 
     //上下文
     private Context mContext;
@@ -39,7 +40,7 @@ public class HttpUtil {
     private int requestType = GET;
 
     //参数
-    private static Map mParams;
+    private Map mParams;
 
     //网络请求
     private static IHttpEngine mHttpEngine;
@@ -47,7 +48,7 @@ public class HttpUtil {
     //是否缓存
     private boolean mCache;
 
-    private static HttpUtil mInstance;
+//    private static HttpUtil mInstance;
 
     private HttpUtil(Context context) {
         mContext = context;
@@ -72,15 +73,36 @@ public class HttpUtil {
     /**
      * 在Application初始化
      */
-    public static void init(IHttpEngine mHttpEngine) {
-        HttpUtil.mHttpEngine = mHttpEngine;
+    public static void initHttpEngine(IHttpEngine httpEngine) {
+        HttpUtil.mHttpEngine = httpEngine;
+    }
+
+    /**
+     * 在Application初始化
+     * 初始化缓存机制
+     *
+     * @param cacheEngine
+     */
+    public static void initCacheEngine(ICacheEngine cacheEngine) {
+        mCacheEngine = cacheEngine;
     }
 
     /**
      * 改变网络请求框架
      */
-    public HttpUtil exchange(IHttpEngine mHttpEngine) {
+    public HttpUtil exchangeHttpEngine(IHttpEngine mHttpEngine) {
         HttpUtil.mHttpEngine = mHttpEngine;
+        return this;
+    }
+
+    /**
+     * 改变缓存机制
+     *
+     * @param cacheEngine
+     * @return
+     */
+    public HttpUtil exchangeCacheEngine(ICacheEngine cacheEngine) {
+        mCacheEngine = cacheEngine;
         return this;
     }
 
@@ -156,10 +178,18 @@ public class HttpUtil {
         //可以添加业务逻辑代码
         callBack.onPreExecute(mContext, mParams);
 
+        if (mCache) {
+            //需要缓存
+            //判断是否有缓存引擎
+            if (mCacheEngine == null) {
+                throw new IllegalArgumentException("未初始化缓存引擎");
+            }
+        }
+
         if (requestType == GET) {
-            mHttpEngine.get(mCache, mContext, mUrl, mParams, callBack);
+            mHttpEngine.get(mCache, mContext, mUrl, mParams, callBack, mCacheEngine);
         } else if (requestType == POST) {
-            mHttpEngine.post(mCache, mContext, mUrl, mParams, callBack);
+            mHttpEngine.post(mCache, mContext, mUrl, mParams, callBack, mCacheEngine);
         }
     }
 

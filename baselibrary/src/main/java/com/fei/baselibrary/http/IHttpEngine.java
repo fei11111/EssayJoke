@@ -17,10 +17,12 @@ import java.util.Map;
 public interface IHttpEngine {
 
     //get请求
-    void get(boolean cache, Context context, String url, Map<String, Object> params, EngineCallBack callBack);
+    void get(boolean cache, Context context, String url, Map<String, Object> params, EngineCallBack callBack,
+             ICacheEngine cacheEngine);
 
     //post请求
-    void post(boolean cache, Context context, String url, Map<String, Object> params, EngineCallBack callBack);
+    void post(boolean cache, Context context, String url, Map<String, Object> params, EngineCallBack callBack,
+              ICacheEngine cacheEngine);
     //上传
 
     //下载
