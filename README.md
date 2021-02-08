@@ -44,12 +44,15 @@ doInBackground()执行完毕之后会利用Handler发送消息切换主线程中
 ####->ActivityStarter.exec->ActivityStarter.startActivityUnChecked->mRootActivityContainer.resumeFocusedStacksTopActivities
 ####->activityStack.resumeTopActivityUncheckedLocked->{startPausingLocked->PauseActivityItem->ActivityThread
                                                       {mStackSupervisor.startSpecificActivityLocked->LaunchActivityItem->ActivityThread
+                                                      ->performLaunchActivity->activity.attach->phoneWindow和windowManager
                                                       ->mInstrumentation.callActivityOnCreate->Acitivity.onCreate->setContentView
-                                                      ->View.onFinishInflate
+                                                                   ->View.onFinishInflate
                                                       {transaction.setLifecycleStateRequest->ResumeActivityItem->ActivityThread
-                                                      ->vm.addView->viewrootImpl.setView->performMeasure->measure->onMeasure
-                                                      ->performLayout->layout->onLayout
-                                                      ->performDraw->draw->onDraw
+                                                      ->Activity.onResume
+                                                      ->vm.addView->WindowMangerGlobal.addView->viewrootImpl.setView
+                                                                  ->performMeasure->measure->onMeasure
+                                                                  ->performLayout->layout->onLayout
+                                                                  ->performDraw->draw->onDraw
 
                                                       
                                                        
