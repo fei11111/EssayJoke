@@ -49,7 +49,7 @@ doInBackground()执行完毕之后会利用Handler发送消息切换主线程中
                                                                    ->View.onFinishInflate
                                                       {transaction.setLifecycleStateRequest->ResumeActivityItem->ActivityThread
                                                       ->Activity.onResume
-                                                      ->vm.addView->WindowMangerGlobal.addView->viewrootImpl.setView
+                                                      ->vm.addView->WindowMangerGlobal.addView->viewrootImpl.setView->requestLayout
                                                                   ->performMeasure->measure->onMeasure
                                                                   ->performLayout->layout->onLayout
                                                                   ->performDraw->draw->onDraw
