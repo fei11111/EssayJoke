@@ -107,7 +107,9 @@ baseLine = getHeight()/2 + dy;
 ldpi     120    240*320
 mdpi     160dp    320px*480px  1dp = 1px
 hdpi     240dp    480*800  1dp = 1.5px
-xhdpi    320    720*1280   1dp = 2px 
+xhdpi    320    720*1280   1dp = 2px
+
+类的加载流程：加载、验证、准备、解析和初始化
 
 六大原则（小插曲：链式调用）
 1.单一原则：一个类只负责一件事
@@ -117,23 +119,53 @@ xhdpi    320    720*1280   1dp = 2px
 5.接口隔离原则：一个接口里尽量少的方法，还有意思就是面向接口编程
 6.迪米特原则：一个对象应该对其它对象有最少的了解，也就是调用时不需要知道太多东西，就可以直接调用
 
-面向切面编程（AOP）AspectJ
+面向切面编程（AOP）AspectJ(再生成dex文件前新增一些代码)
 1 下载 aspectj-1.8.10.jar 文件
 2 双击安装 一直点击下一步
 3 新建应用  然后在 build.gradle 里面添加配置
 4 去安装目录下面 copy 一个开发包
 5 写代码
 
+类图
+1.Generalization泛型(继承)
+2.Realization实现
+3.Dependency依赖，体现局部变量函数参数
+4.Association关联，体现在成员变量，双向，单向
+5.Aggregation聚合，整体与部分，并且没有了整体，局部也可单独存在，如公司和员工，车和轮胎
+6.Composition组合，整体与局部的关系，是一种强烈的包含关系，部分不能脱离整体存在，如公司和部门
 
 
-
+apt+注解(用来在编译时扫描和处理注解)
+简单来说就是在编译期，通过注解生成.java文件。
+举例如ButterKnife，三个module
+butterKnife-annotation 定义注解 /java module
+butterKnife 工具类
+butterKnife-processor 注解处理器 /java module
+app 依赖 butterKnife和butterKnife-annotation，并且annotationProcessor butterKnife-processor
+注意1.若Gradle<2.2
+在Project的 build.gradle中：
+buildscript {
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+在Module的buile.gradle中：
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+dependencies {
+    apt project(':apt-processor')
+}
+注意2.运行时不能生成文件
+processor的build.gradle加入如下两句成功
+compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
+annotationProcessor 'com.google.auto.service:auto-service:1.0-rc4'
 
 设计模式
 
 
 
 
-类的加载流程：加载、验证、准备、解析和初始化
+
 
 
 
