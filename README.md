@@ -44,12 +44,12 @@ doInBackground()执行完毕之后会利用Handler发送消息切换主线程中
 ####->ActivityStarter.exec->ActivityStarter.startActivityUnChecked->mRootActivityContainer.resumeFocusedStacksTopActivities
 ####->activityStack.resumeTopActivityUncheckedLocked->{startPausingLocked->PauseActivityItem->ActivityThread
                                                       {mStackSupervisor.startSpecificActivityLocked->LaunchActivityItem->ActivityThread
-                                                      ->performLaunchActivity->activity.attach->phoneWindow和windowManager
+                                                      ->performLaunchActivity->activity.attach->phoneWindow和windowManager,windowManager实现是windowManagerImpl
                                                       ->mInstrumentation.callActivityOnCreate->Acitivity.onCreate->setContentView
                                                                    ->View.onFinishInflate
                                                       {transaction.setLifecycleStateRequest->ResumeActivityItem->ActivityThread
                                                       ->Activity.onResume
-                                                      ->vm.addView->WindowMangerGlobal.addView->viewrootImpl.setView->requestLayout
+                                                      ->vm.addView->windowManagerImpl.addView->WindowMangerGlobal.addView->viewrootImpl.setView->requestLayout
                                                                   ->performMeasure->measure->onMeasure
                                                                   ->performLayout->layout->onLayout
                                                                   ->performDraw->draw->onDraw
@@ -142,6 +142,7 @@ butterKnife-annotation 定义注解 /java module
 butterKnife 工具类
 butterKnife-processor 注解处理器 /java module
 app 依赖 butterKnife和butterKnife-annotation，并且annotationProcessor butterKnife-processor
+butterKnife-processor 依赖butterKnife-annotation
 注意1.若Gradle<2.2
 在Project的 build.gradle中：
 buildscript {
@@ -161,6 +162,14 @@ compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
 annotationProcessor 'com.google.auto.service:auto-service:1.0-rc4'
 
 设计模式
+1.单例模式：
+套路：1.构造函数必须私有，防止外层new
+     2.提供一个静态方法获得对象
+volatile: 1.防止线程重排序
+          2.线程可见性
+2.Builder设计模式
+套路：1.静态内部类用于设置参数
+     2.静态内部类创建返回对象
 
 
 

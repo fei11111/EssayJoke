@@ -8,14 +8,15 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-
 import com.fei.baselibrary.ioc.Visibility;
 import com.fei.baselibrary.utils.StatusBarUtil;
 import com.fei.baselibrary.view.ViewHelper;
+
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 
 /**
  * @ClassName: AbsNavigationBar 抽象类 链式+builder
@@ -162,10 +163,26 @@ public abstract class AbsNavigationBar implements INavigationBar {
             return this;
         }
 
+        /**
+         * 设置布局
+         *
+         * @return
+         */
+        protected Builder setLayoutRes(@LayoutRes int layoutRes) {
+            P.layoutRes = layoutRes;
+            return this;
+        }
+
         public T build() {
             //创建NavigationBar
             T navigationBar = createNavigationBar(P);
-            P.layoutRes = navigationBar.getLayoutRes();
+            if (P.layoutRes == -1) {
+                P.layoutRes = navigationBar.getLayoutRes();
+            }
+            if (P.layoutRes == -1) {
+                //如果布局文件为空，说明头部布局没有实现
+                throw new IllegalArgumentException("please make sure getLayoutRes has value");
+            }
             //1.获取布局文件
             View contentView = P.mViewHelper.setContentView(P.mContext, P.layoutRes, P.mViewGroup);
             if (contentView == null) {

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.fei.baselibrary.fix.FixManager;
 import com.fei.baselibrary.permission.PermissionSuccess;
 import com.fei.baselibrary.permission.PermissionUtil;
+import com.fei.baselibrary.view.navigationbar.AbsNavigationBar;
 import com.fei.framelibrary.base.BaseSkinActivity;
 import com.fei.framelibrary.navigationBar.DefaultNavigatorBar;
 import com.fei.framelibrary.skin.SkinManager;
@@ -30,6 +31,7 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initData() {
+
         //异常处理
 //        File crashFile = ExceptionCrashHandler.getInstance().getCrashFile();
 //        if (crashFile.exists()) {
