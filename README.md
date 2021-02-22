@@ -191,7 +191,12 @@ PriorityBlockingQueue 无序的可以根据优先级排序
 6.策略设计模式（算法不一样，但功能一样）
 
 
+9.代理设计模式
+9.1静态代理-将对象作为参数传入类中
+9.2动态代理-Proxy.newProxyInstance
 
+10.原型设计模式
+套路：实现clonable，重写clone()
 
 
 
