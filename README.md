@@ -197,6 +197,7 @@ PriorityBlockingQueue 无序的可以根据优先级排序
 数据-被观察者
 界面-观察者
 被观察者订阅观察者
+
 9.代理设计模式
 9.1静态代理-将对象作为参数传入类中
 9.2动态代理-Proxy.newProxyInstance
