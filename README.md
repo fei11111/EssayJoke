@@ -225,3 +225,8 @@ http1.x和http2.0区别
 同步：打电话-处理-反馈
 异步：打电话-处理（挂断）->打回来
 
+okhttp
+1.最好是单例client+request->realCall->call.enqueue->线程池.enqueue(AsyCall(callback) extends Runnable)
+
+retrofit
+反射+注解+动态代理（请求在动态代理里）
