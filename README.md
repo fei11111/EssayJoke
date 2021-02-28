@@ -230,3 +230,5 @@ okhttp
 
 retrofit
 反射+注解+动态代理（请求在动态代理里）
+
+binder驱动
