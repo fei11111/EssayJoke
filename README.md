@@ -232,3 +232,8 @@ retrofit
 反射+注解+动态代理（请求在动态代理里）
 
 binder驱动
+客户端、服务器端都有Stub和Proxy，客户端bindService后返回binder，
+通过asInterface复制到客户端stub.proxy里，之后操作都由proxy的tranct传输到ontract
+
+eventbus
+运行时注解+反射+享元设计模式

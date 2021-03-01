@@ -56,6 +56,7 @@ public class MessageService extends Service {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             LogUtils.i(TAG, "绑定成功");
+            ProcessAidl.Stub.asInterface(service);
         }
 
         @Override

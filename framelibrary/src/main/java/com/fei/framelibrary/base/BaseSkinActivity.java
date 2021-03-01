@@ -59,7 +59,7 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
             for (int i = 0; i < attrs.getAttributeCount(); i++) {
                 //1.获取属性名、属性值,属性值是android:src="@2123123"
                 //src为属性名，@2123123为属性值
-                attrs.getAttributeNameResource(i);
+//                attrs.getAttributeNameResource(i);
                 String attributeName = attrs.getAttributeName(i);
                 String attributeValue = attrs.getAttributeValue(i);
                 //2.必须是@开头的属性值才能换肤，根据属性值@2123123获取资源名getResourceEntryName，资源类型getResourceTypeName
